@@ -6,10 +6,8 @@ import ca.uqam.bookmanager.book.BookSupervisor;
 
 import java.util.Scanner;
 
-class ApplicationSupervisor
+class ApplicationSupervisor extends Supervisor
 {
-    private Scanner scanner = new Scanner(System.in);
-    
     public void run()
     {
         UserSupervisor userSupervisor = new UserSupervisor();

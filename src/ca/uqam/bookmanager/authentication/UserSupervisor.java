@@ -1,12 +1,12 @@
 package ca.uqam.bookmanager.authentication;
 
+import ca.uqam.bookmanager.Supervisor;
+
 import java.util.Objects;
 import java.util.Scanner;
 
-public class UserSupervisor
+public class UserSupervisor extends Supervisor
 {
-    
-    private Scanner scanner = new Scanner(System.in);
     IUserProvider userProvider = new UserProvider();
     
     

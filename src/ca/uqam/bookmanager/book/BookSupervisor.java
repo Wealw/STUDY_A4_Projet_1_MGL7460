@@ -1,13 +1,12 @@
 package ca.uqam.bookmanager.book;
 
+import ca.uqam.bookmanager.Supervisor;
 import ca.uqam.bookmanager.authentication.UserRole;
 
 import java.util.Scanner;
 
-public class BookSupervisor
+public class BookSupervisor extends Supervisor
 {
-    
-    private Scanner scanner = new Scanner(System.in);
     
     public void BookMenu(UserRole userRole)
     {
