@@ -4,9 +4,10 @@ public class UserProvider implements IUserProvider
 {
     
     @Override
-    public void CreateUser()
+    public User CreateUser(String username, String passwordHash)
     {
         // TODO : Write SLQ request
+        return null;
     }
     @Override
     public User[] ReadAllUser()
@@ -18,6 +19,10 @@ public class UserProvider implements IUserProvider
     public User ReadUser(int id)
     {
         // TODO : Write SLQ request
+        return null;
+    }
+    @Override
+    public User ReadUser(String username){
         return null;
     }
     @Override
