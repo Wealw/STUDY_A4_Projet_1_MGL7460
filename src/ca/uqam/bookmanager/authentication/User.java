@@ -14,7 +14,7 @@ public class User
     private UserRole      role;
     private MessageDigest messageDigest;
     
-    private User(String username, String passwordHash, UserRole role)
+    public User(String username, String passwordHash, UserRole role)
     {
         this.username = username;
         this.passwordHash = passwordHash;
