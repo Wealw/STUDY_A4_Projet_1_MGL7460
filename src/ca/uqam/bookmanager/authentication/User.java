@@ -14,7 +14,7 @@ public class User
     private UserRole      role;
     private MessageDigest messageDigest;
     
-    private User(String username, String passwordHash, UserRole role)
+    public User(String username, String passwordHash, UserRole role)
     {
         this.username = username;
         this.passwordHash = passwordHash;
@@ -47,27 +47,27 @@ public class User
         return Objects.equals(passwordHash, hashString(password));
     }
     
-    private String getUsername()
+    public String getUsername()
     {
         return username;
     }
-    private void setUsername(String username)
+    public void setUsername(String username)
     {
         this.username = username;
     }
-    private String getPasswordHash()
+    public String getPasswordHash()
     {
         return passwordHash;
     }
-    private void setPasswordHash(String password)
+    public void setPasswordHash(String password)
     {
         this.passwordHash = hashString(password);
     }
-    private UserRole getRole()
+    public UserRole getRole()
     {
         return role;
     }
-    private void setRole(UserRole role)
+    public void setRole(UserRole role)
     {
         this.role = role;
     }

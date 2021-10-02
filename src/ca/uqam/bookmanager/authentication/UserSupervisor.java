@@ -36,15 +36,15 @@ public class UserSupervisor
     
     private UserHomeAction HandleAuthenticationMenu()
     {
-        int userChoice = Integer.parseInt(this.scanner.nextLine());
-        System.out.println(userChoice);
-        if (userChoice == 0)
-            return UserHomeAction.QUIT;
-        if (userChoice == 1)
-            return UserHomeAction.LOGIN;
-        if (userChoice == 2)
-            return UserHomeAction.SIGNUP;
-        return null;
+        
+        try
+        {
+            return UserHomeAction.values()[Integer.parseInt(this.scanner.nextLine())];
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
     
     private User LogIn()
@@ -55,8 +55,10 @@ public class UserSupervisor
         String password   = this.scanner.nextLine();
         User   userObject = userProvider.ReadUser(username);
         if (userObject != null && userObject.verifyPassword(password))
+        {
+            System.out.println("Successfully logged in as" + username);
             return userObject;
-        System.out.println("Successfully logged in as" + username);
+        }
         return null;
     }
     
