@@ -4,9 +4,9 @@ public class BookProvider implements IBookProvider
 {
     
     @Override
-    public void CreateBook()
+    public Book CreateBook(String title, String author, String description, int isbn, int quantity)
     {
-    // TODO : Write SLQ request
+        return null;
     }
     @Override
     public Book[] ReadAllBook()
@@ -21,12 +21,12 @@ public class BookProvider implements IBookProvider
         return null;
     }
     @Override
-    public void UpdateBook()
+    public void UpdateBook(String title, String author, String description, int isbn, int quantity)
     {
         // TODO : Write SLQ request
     }
     @Override
-    public void DeleteBook()
+    public void DeleteBook(int id)
     {
         // TODO : Write SLQ request
     }

@@ -2,15 +2,13 @@ package ca.uqam.bookmanager.book;
 
 public interface IBookProvider
 {
-    // TODO : Update prototype parameter according to book property
-    public void CreateBook();
-    public Book[] ReadAllBook();
-    public Book ReadBook(int id);
-    // TODO : Update prototype parameter according to book property
-    public void UpdateBook();
-    public void DeleteBook();
-    public Book[] SearchBookByTitle();
-    public Book[] SearchBookByAuthor();
-    public Book[] SearchBookByDescription();
+    Book CreateBook(String title, String author, String description, int isbn, int quantity);
+    Book[] ReadAllBook();
+    Book ReadBook(int id);
+    void UpdateBook(String title, String author, String description, int isbn, int quantity);
+    void DeleteBook(int id);
+    Book[] SearchBookByTitle();
+    Book[] SearchBookByAuthor();
+    Book[] SearchBookByDescription();
 
 }
