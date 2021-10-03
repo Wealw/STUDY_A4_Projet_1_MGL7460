@@ -1,7 +1,16 @@
 package ca.uqam.bookmanager.book;
 
+import ca.uqam.bookmanager.database.IDataSource;
+
 public class BookProvider implements IBookProvider
 {
+    
+    IDataSource dataSource;
+    
+    public BookProvider(IDataSource dataSource)
+    {
+        this.dataSource = dataSource;
+    }
     
     @Override
     public Book CreateBook(String title, String author, String description, int isbn, int quantity)

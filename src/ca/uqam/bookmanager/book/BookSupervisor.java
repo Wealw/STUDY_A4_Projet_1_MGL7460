@@ -1,14 +1,20 @@
 package ca.uqam.bookmanager.book;
 
+
 import ca.uqam.bookmanager.Supervisor;
 import ca.uqam.bookmanager.authentication.UserRole;
 
 import java.util.Objects;
+import ca.uqam.bookmanager.database.IDataSource;
 
 public class BookSupervisor extends Supervisor
 {
     
-    IBookProvider bookProvider = new BookProvider();
+    IBookProvider bookProvider;
+    
+    public BookSupervisor(IDataSource datasource){
+        this.bookProvider = new BookProvider(datasource);
+    }
     
     public void BookMenu(UserRole userRole)
     {

@@ -3,6 +3,8 @@ package ca.uqam.bookmanager;
 import ca.uqam.bookmanager.authentication.User;
 import ca.uqam.bookmanager.authentication.UserSupervisor;
 import ca.uqam.bookmanager.book.BookSupervisor;
+import ca.uqam.bookmanager.database.Database;
+import ca.uqam.bookmanager.database.IDataSource;
 
 import java.util.Scanner;
 
@@ -10,8 +12,9 @@ class ApplicationSupervisor extends Supervisor
 {
     public void run()
     {
-        UserSupervisor userSupervisor = new UserSupervisor();
-        BookSupervisor bookSupervisor = new BookSupervisor();
+        IDataSource dataSource = new Database();
+        UserSupervisor userSupervisor = new UserSupervisor(dataSource);
+        BookSupervisor bookSupervisor = new BookSupervisor(dataSource);
         DisplayApplicationLogo();
         User user = userSupervisor.AuthenticationMenu();
         AppAction userAction = null;

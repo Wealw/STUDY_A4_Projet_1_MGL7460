@@ -1,14 +1,21 @@
 package ca.uqam.bookmanager.authentication;
 
+
 import ca.uqam.bookmanager.Supervisor;
+import ca.uqam.bookmanager.database.IDataSource;
+
 
 import java.util.Objects;
 import java.util.Scanner;
 
 public class UserSupervisor extends Supervisor
 {
-    IUserProvider userProvider = new UserProvider();
+    IUserProvider userProvider;
     
+    public UserSupervisor(IDataSource datasource)
+    {
+        this.userProvider = new UserProvider(datasource);
+    }
     
     public User AuthenticationMenu()
     {
@@ -81,5 +88,5 @@ public class UserSupervisor extends Supervisor
             System.out.println("There was an error during the creation of your user profile, your username is already in use. Please use another one");
         return userObject;
     }
-    
+   
 }
