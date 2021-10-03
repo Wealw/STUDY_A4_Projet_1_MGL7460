@@ -21,7 +21,7 @@ public class BookProvider implements IBookProvider
         return null;
     }
     @Override
-    public void UpdateBook(String title, String author, String description, int isbn, int quantity)
+    public void UpdateBook(int id,String title, String author, String description, int isbn, int quantity)
     {
         // TODO : Write SLQ request
     }

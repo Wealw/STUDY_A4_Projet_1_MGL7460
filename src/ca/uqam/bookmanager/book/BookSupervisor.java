@@ -81,8 +81,6 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
             System.out.println("\u001B[34mTitle :\u001B[0m");
             String title = scanner.nextLine();
             System.out.println("\u001B[34mAuthor :\u001B[0m");
@@ -104,7 +102,44 @@ public class BookSupervisor extends Supervisor
     
     private void UpdateMenu()
     {
-    
+        try
+        {
+            System.out.println("Enter the id of the book you want to update :");
+            Book book = bookProvider.ReadBook(Integer.parseInt(scanner.nextLine()));
+            if (book != null)
+            {
+                System.out.printf("\u001B[34mTitle :\u001B[0m (leave blank for no change) (current : %s)", book.getTitle());
+                String title = scanner.nextLine();
+                System.out.printf("\u001B[34mAuthor :\u001B[0m (leave blank for no change) (current : %s)", book.getAuthor());
+                String author = scanner.nextLine();
+                System.out.printf("\u001B[34mDescription :\u001B[0m (leave blank for no change) (current : %s)", book.getDescription());
+                String description = scanner.nextLine();
+                System.out.printf("\u001B[34mISBN :\u001B[0m (leave blank for no change) (current : %d)", book.getIsbn());
+                int isbn = Integer.parseInt(scanner.nextLine());
+                System.out.printf("\u001B[34mQuantity :\u001B[0m (leave blank for no change) (current : %s)", book.getQuantity());
+                int  quantity = Integer.parseInt(scanner.nextLine());
+                Book temp = new Book(title, author, description, isbn, quantity);
+                System.out.println("This is the updated book :");
+                System.out.println(temp.ToString());
+                String answer = "";
+                while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
+                {
+                    System.out.println("\u001B[33mAre you sure you want to update this book ? (Y/N)\u001B[0m");
+                    answer = scanner.nextLine();
+                    if (Objects.equals(answer, "Y"))
+                        bookProvider.DeleteBook(book.getId());
+                }
+                bookProvider.UpdateBook(book.getId(), title, author, description, isbn, quantity);
+            }
+            else
+            {
+                System.out.println("\u001B[31mThe book you are trying to update doesn't exist\u001B[0m");
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("\u001B[31mThere was an error during the deletion of the book, please refer to the manual or the application developer\u001B[0m");
+        }
     }
     
     private void DeleteMenu()
