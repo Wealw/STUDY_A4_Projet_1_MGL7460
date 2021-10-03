@@ -1,12 +1,22 @@
 package ca.uqam.bookmanager.authentication;
 
+import ca.uqam.bookmanager.database.IDataSource;
+
 public class UserProvider implements IUserProvider
 {
+    IDataSource dataSource;
+    
+    public UserProvider(IDataSource dataSource)
+    {
+        this.dataSource = dataSource;
+    }
     
     @Override
-    public void CreateUser()
+    public User CreateUser(String username, String passwordHash)
     {
         // TODO : Write SLQ request
+        return null;
+
     }
     @Override
     public User[] ReadAllUser()
@@ -18,6 +28,11 @@ public class UserProvider implements IUserProvider
     public User ReadUser(int id)
     {
         // TODO : Write SLQ request
+        return null;
+    }
+    @Override
+
+    public User ReadUser(String username){
         return null;
     }
     @Override

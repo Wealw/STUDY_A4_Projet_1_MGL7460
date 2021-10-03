@@ -1,10 +1,30 @@
 package ca.uqam.bookmanager.database;
 
-public class Database
-{
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-    public Database(String ConnectionString){
+public class Database implements IDataSource
+{
     
+    private Connection database;
+    
+    public Database()
+    {
+        try
+        {
+            database = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+        }
+        catch (SQLException e)
+        {
+            System.out.println("There was an arror when connecting to the database please refer to the developer");
+            System.exit(1);
+        }
+    }
+    
+    public Connection getDatabase()
+    {
+        return database;
     }
     
 }
