@@ -21,7 +21,7 @@ class ApplicationSupervisor extends Supervisor
         while (userAction != AppAction.QUIT){
             DisplayAppAction();
             userAction = HandleAppAction();
-            //if (userAction == AppAction.USER) userSupervisor.AuthenticationMenu(user.getRole());
+            if (userAction == AppAction.USER) userSupervisor.UserMenu(user);
             if (userAction == AppAction.BOOK) bookSupervisor.BookMenu(user.getRole());
         }
     }
