@@ -11,4 +11,5 @@ public interface IUserProvider
     void UpdateUser(int id, String username, String passwordHash, UserRole role);
     void DeleteUser(int id);
     User[] SearchUserByUsername(String username);
+    User[] SearchUserByRole(UserRole role);
 }

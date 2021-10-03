@@ -147,11 +147,11 @@ public class UserSupervisor extends Supervisor
     {
         System.out.printf("Enter a new username (leave blank for no change) (current : %s)", user.getUsername());
         String username = scanner.nextLine();
-        System.out.printf("Enter a new password (leave blank for no change)");
+        System.out.println("Enter a new password (leave blank for no change)");
         String password = scanner.nextLine();
-        System.out.printf("Confirm password (leave blank for no change)");
+        System.out.println("Confirm password (leave blank for no change)");
         String passwordConfirmation = scanner.nextLine();
-        if (username != "")
+        if (!Objects.equals(username, ""))
         {
             user.setUsername(username);
         }
@@ -180,7 +180,69 @@ public class UserSupervisor extends Supervisor
     
     private void SearchUser()
     {
+        UserSearchAction action = null;
+        while (action != UserSearchAction.QUIT)
+        {
+            DisplayUserSearchOption();
+            action = HandleUserSearchOption();
+            if (action == UserSearchAction.BY_USERNAME)
+                SearchUserByUsername();
+            if (action == UserSearchAction.BY_ROLE)
+                SearchUserByRole();
+        }
+    }
     
+    private void DisplayUserSearchOption()
+    {
+        System.out.println("Please select one of the following option :");
+        System.out.println("(1) Search by username");
+        System.out.println("(2) Search by role");
+        System.out.println("(0) Leave");
+    }
+    
+    private UserSearchAction HandleUserSearchOption()
+    {
+        try
+        {
+            return UserSearchAction.values()[Integer.parseInt(this.scanner.nextLine())];
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    
+    public void SearchUserByUsername()
+    {
+        User[] users = userProvider.SearchUserByUsername(scanner.nextLine());
+        for (User user : users)
+        {
+            System.out.println(user.ToString());
+        }
+    }
+    public void SearchUserByRole()
+    {
+        try
+        {
+            int choice = -1;
+            while (choice < 1 || choice > 3)
+            {
+                System.out.println("Select one of the following option");
+                System.out.println("(1) Normal user");
+                System.out.println("(2) Librarian");
+                System.out.println("(3) Administrator");
+                choice = Integer.parseInt(scanner.nextLine());
+            }
+            User[] users = userProvider.SearchUserByRole(UserRole.values()[choice]);
+            for (User user : users)
+            {
+                System.out.println(user.ToString());
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
+        }
     }
     
     private void CreateUser()
@@ -193,17 +255,24 @@ public class UserSupervisor extends Supervisor
             String password = scanner.nextLine();
             System.out.println("Confirm password");
             String passwordConfirmation = scanner.nextLine();
-            int    choice               = -1;
-            while (choice < 1 || choice > 3)
+            if (Objects.equals(password, passwordConfirmation))
             {
-                System.out.println("Select one of the following option");
-                System.out.println("(1) Normal user");
-                System.out.println("(2) Librarian");
-                System.out.println("(3) Administrator");
-                choice = Integer.parseInt(scanner.nextLine());
+                int choice = -1;
+                while (choice < 1 || choice > 3)
+                {
+                    System.out.println("Select one of the following option");
+                    System.out.println("(1) Normal user");
+                    System.out.println("(2) Librarian");
+                    System.out.println("(3) Administrator");
+                    choice = Integer.parseInt(scanner.nextLine());
+                }
+                UserRole role = UserRole.values()[choice];
+                userProvider.CreateUser(username, password, role);
             }
-            UserRole role = UserRole.values()[choice];
-            userProvider.CreateUser(username, password, role);
+            else
+            {
+                System.out.println("\u001B[31mThe passwords you entered didn't match\u001B[0m");
+            }
         }
         catch (NumberFormatException e)
         {

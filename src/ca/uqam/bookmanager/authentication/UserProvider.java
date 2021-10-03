@@ -51,5 +51,10 @@ public class UserProvider implements IUserProvider
         // TODO : Write SLQ request
         return new User[0];
     }
+    @Override
+    public User[] SearchUserByRole(UserRole role)
+    {
+        return new User[0];
+    }
     
 }
