@@ -13,9 +13,9 @@ public class BookProvider implements IBookProvider
     }
     
     @Override
-    public void CreateBook()
+    public Book CreateBook(String title, String author, String description, int isbn, int quantity)
     {
-        // TODO : Write SLQ request
+        return null;
     }
     @Override
     public Book[] ReadAllBook()
@@ -30,30 +30,35 @@ public class BookProvider implements IBookProvider
         return null;
     }
     @Override
-    public void UpdateBook()
+    public void UpdateBook(int id,String title, String author, String description, int isbn, int quantity)
     {
         // TODO : Write SLQ request
     }
     @Override
-    public void DeleteBook()
+    public void DeleteBook(int id)
     {
         // TODO : Write SLQ request
     }
     @Override
-    public Book[] SearchBookByTitle()
-    {
-        // TODO : Write SLQ request
-        return new Book[0];
-    }
-    @Override
-    public Book[] SearchBookByAuthor()
+    public Book[] SearchBookByTitle(String title)
     {
         // TODO : Write SLQ request
         return new Book[0];
     }
     @Override
-    public Book[] SearchBookByDescription()
+    public Book[] SearchBookByAuthor(String author)
     {
+        // TODO : Write SLQ request
+        return new Book[0];
+    }
+    @Override
+    public Book[] SearchBookByDescription(String description)
+    {
+        // TODO : Write SLQ request
+        return new Book[0];
+    }
+    @Override
+    public Book[] SearchBookByIsbn(int isbn){
         // TODO : Write SLQ request
         return new Book[0];
     }
