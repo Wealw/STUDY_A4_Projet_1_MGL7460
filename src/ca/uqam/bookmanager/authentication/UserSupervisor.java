@@ -1,5 +1,7 @@
 package ca.uqam.bookmanager.authentication;
 
+import ca.uqam.bookmanager.database.IDataSource;
+
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -7,7 +9,12 @@ public class UserSupervisor
 {
     
     private Scanner scanner = new Scanner(System.in);
-    IUserProvider userProvider = new UserProvider();
+    IUserProvider userProvider;
+    
+    public UserSupervisor(IDataSource datasource)
+    {
+        this.userProvider = new UserProvider(datasource);
+    }
     
     
     public User AuthenticationMenu()

@@ -2,14 +2,17 @@ package ca.uqam.bookmanager;
 
 import ca.uqam.bookmanager.authentication.UserSupervisor;
 import ca.uqam.bookmanager.book.BookSupervisor;
+import ca.uqam.bookmanager.database.Database;
+import ca.uqam.bookmanager.database.IDataSource;
 
 class ApplicationSupervisor
 {
     
     public void run()
     {
-        UserSupervisor userSupervisor = new UserSupervisor();
-        BookSupervisor bookSupervisor = new BookSupervisor();
+        IDataSource dataSource = new Database();
+        UserSupervisor userSupervisor = new UserSupervisor(dataSource);
+        BookSupervisor bookSupervisor = new BookSupervisor(dataSource);
         DisplayApplicationLogo();
         userSupervisor.AuthenticationMenu();
     }

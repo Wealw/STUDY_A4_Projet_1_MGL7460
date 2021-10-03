@@ -1,7 +1,15 @@
 package ca.uqam.bookmanager.authentication;
 
+import ca.uqam.bookmanager.database.IDataSource;
+
 public class UserProvider implements IUserProvider
 {
+    IDataSource dataSource;
+    
+    public UserProvider(IDataSource dataSource)
+    {
+        this.dataSource = dataSource;
+    }
     
     @Override
     public User CreateUser(String username, String passwordHash)
