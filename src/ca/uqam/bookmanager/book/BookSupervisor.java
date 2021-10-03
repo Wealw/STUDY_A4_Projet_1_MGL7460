@@ -74,7 +74,16 @@ public class BookSupervisor extends Supervisor
     
     private void SearchMenu()
     {
+        //TODO : Add a search menu
+    }
     
+    private void DisplaySearchOption(){
+        //TODO : Add display
+    }
+    
+    private BookSearchAction HandleSearchOption(){
+        //TODO : Add handler
+        return null;
     }
     
     private void CreateMenu()
