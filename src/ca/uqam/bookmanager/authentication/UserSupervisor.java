@@ -86,5 +86,5 @@ public class UserSupervisor
             System.out.println("There was an error during the creation of your user profile, your username is already in use. Please use another one");
         return userObject;
     }
-    
+   
 }

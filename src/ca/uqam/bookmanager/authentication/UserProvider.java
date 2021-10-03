@@ -16,6 +16,7 @@ public class UserProvider implements IUserProvider
     {
         // TODO : Write SLQ request
         return null;
+
     }
     @Override
     public User[] ReadAllUser()
@@ -30,6 +31,7 @@ public class UserProvider implements IUserProvider
         return null;
     }
     @Override
+
     public User ReadUser(String username){
         return null;
     }
