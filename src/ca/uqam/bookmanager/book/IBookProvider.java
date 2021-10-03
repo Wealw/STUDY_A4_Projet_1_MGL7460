@@ -7,8 +7,9 @@ public interface IBookProvider
     Book ReadBook(int id);
     void UpdateBook(int id,String title, String author, String description, int isbn, int quantity);
     void DeleteBook(int id);
-    Book[] SearchBookByTitle();
-    Book[] SearchBookByAuthor();
-    Book[] SearchBookByDescription();
-
+    Book[] SearchBookByTitle(String title);
+    Book[] SearchBookByAuthor(String author);
+    Book[] SearchBookByDescription(String description);
+    Book[] SearchBookByIsbn(int isbn);
+    
 }

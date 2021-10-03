@@ -40,20 +40,25 @@ public class BookProvider implements IBookProvider
         // TODO : Write SLQ request
     }
     @Override
-    public Book[] SearchBookByTitle()
+    public Book[] SearchBookByTitle(String title)
     {
         // TODO : Write SLQ request
         return new Book[0];
     }
     @Override
-    public Book[] SearchBookByAuthor()
+    public Book[] SearchBookByAuthor(String author)
     {
         // TODO : Write SLQ request
         return new Book[0];
     }
     @Override
-    public Book[] SearchBookByDescription()
+    public Book[] SearchBookByDescription(String description)
     {
+        // TODO : Write SLQ request
+        return new Book[0];
+    }
+    @Override
+    public Book[] SearchBookByIsbn(int isbn){
         // TODO : Write SLQ request
         return new Book[0];
     }
