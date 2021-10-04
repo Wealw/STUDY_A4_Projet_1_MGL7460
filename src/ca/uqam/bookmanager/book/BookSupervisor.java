@@ -260,10 +260,26 @@ public class BookSupervisor extends Supervisor
                 System.out.printf("\u001B[34mDescription :\u001B[0m (leave blank for no change) (current : %s)", book.getDescription());
                 String description = scanner.nextLine();
                 System.out.printf("\u001B[34mISBN :\u001B[0m (leave blank for no change) (current : %d)", book.getIsbn());
-                int isbn = Integer.parseInt(scanner.nextLine());
+                int isbn;
+                try
+                {
+                    isbn = Integer.parseInt(scanner.nextLine());
+                }
+                catch (NumberFormatException e)
+                {
+                    isbn = book.getIsbn();
+                }
                 System.out.printf("\u001B[34mQuantity :\u001B[0m (leave blank for no change) (current : %s)", book.getQuantity());
-                int  quantity = Integer.parseInt(scanner.nextLine());
-                Book temp     = new Book(title, author, description, isbn, quantity);
+                int quantity;
+                try
+                {
+                    quantity = Integer.parseInt(scanner.nextLine());
+                }
+                catch (NumberFormatException e)
+                {
+                    quantity = book.getQuantity();
+                }
+                Book temp = new Book(title, author, description, isbn, quantity);
                 System.out.println("This is the updated book :");
                 System.out.println(temp.ToString());
                 String answer = "";
@@ -274,7 +290,13 @@ public class BookSupervisor extends Supervisor
                     if (Objects.equals(answer, "Y"))
                         bookProvider.DeleteBook(book.getId());
                 }
-                bookProvider.UpdateBook(book.getId(), title, author, description, isbn, quantity);
+                if (!Objects.equals(title, ""))
+                    book.setTitle(title);
+                if (!Objects.equals(author, ""))
+                    book.setAuthor(author);
+                if (!Objects.equals(description, ""))
+                    book.setDescription(description);
+                bookProvider.UpdateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getIsbn(), book.getQuantity());
             }
             else
             {
