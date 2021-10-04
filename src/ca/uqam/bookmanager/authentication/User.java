@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class User
 {
     
+    private int           id;
     private String        username;
     private String        passwordHash;
     private UserRole      role;
@@ -32,7 +33,7 @@ public class User
     
     private String hashString(String string)
     {
-        final byte[] bytes = messageDigest.digest(string.getBytes(StandardCharsets.UTF_8));
+        final byte[]  bytes = messageDigest.digest(string.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb    = new StringBuilder();
         for (byte aByte : bytes)
         {
@@ -59,7 +60,7 @@ public class User
     {
         return passwordHash;
     }
-    public void setPasswordHash(String password)
+    public void setPassword(String password)
     {
         this.passwordHash = hashString(password);
     }
@@ -70,6 +71,18 @@ public class User
     public void setRole(UserRole role)
     {
         this.role = role;
+    }
+    public int getId()
+    {
+        return id;
+    }
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+    
+    public String ToString(){
+        return String.format("\u001B[34mId:\u001B[0m %d \u001B[34mUsername:\u001B[0m %s \u001B[34mRole:\u001B[0m %s", id, username,role.toString());
     }
     
 }
