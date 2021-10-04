@@ -288,7 +288,38 @@ public class UserSupervisor extends Supervisor
             User user = userProvider.ReadUser(Integer.parseInt(scanner.nextLine()));
             if (user != null)
             {
-                EditUser(user);
+                System.out.printf("Enter a new username (leave blank for no change) (current : %s)", user.getUsername());
+                String username = scanner.nextLine();
+                System.out.println("Enter a new password (leave blank for no change)");
+                String password = scanner.nextLine();
+                System.out.println("Confirm password (leave blank for no change)");
+                String passwordConfirmation = scanner.nextLine();
+                if (!Objects.equals(username, ""))
+                {
+                    user.setUsername(username);
+                }
+                if (!Objects.equals(password, ""))
+                {
+                    if (Objects.equals(password, passwordConfirmation))
+                    {
+                        System.out.println("The password didn't match its confirmation");
+                    }
+                    else
+                    {
+                        user.setPassword(password);
+                    }
+                }
+                int choice = -1;
+                while (choice < 1 || choice > 3)
+                {
+                    System.out.println("Select one of the following option");
+                    System.out.println("(1) Normal user");
+                    System.out.println("(2) Librarian");
+                    System.out.println("(3) Administrator");
+                    choice = Integer.parseInt(scanner.nextLine());
+                }
+                user.setRole(UserRole.values()[choice]);
+                userProvider.UpdateUser(user.getId(), user.getUsername(), user.getPasswordHash(), user.getRole());
             }
             else
             {
