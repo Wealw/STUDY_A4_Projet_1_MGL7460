@@ -54,7 +54,7 @@ public class UserProvider implements IUserProvider
     @Override
     public User[] SearchUserByUsername(String username)
     {
-        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE " + username + ";");
+        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
     }
     @Override
     public User[] SearchUserByRole(UserRole role)
