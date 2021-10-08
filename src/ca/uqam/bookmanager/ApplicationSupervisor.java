@@ -29,22 +29,23 @@ class ApplicationSupervisor extends Supervisor
     private void DisplayApplicationLogo()
     {
         System.out.println("""
-                                    ____              _    __  __                                  \s
+                                   \033[1;35m ____              _    __  __                                  \s
                                    |  _ \\            | |  |  \\/  |                                 \s
                                    | |_) | ___   ___ | | _| \\  / | __ _ _ __   __ _  __ _  ___ _ __\s
                                    |  _ < / _ \\ / _ \\| |/ / |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|
                                    | |_) | (_) | (_) |   <| |  | | (_| | | | | (_| | (_| |  __/ |  \s
                                    |____/ \\___/ \\___/|_|\\_\\_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|  \s
                                                                                      __/ |         \s
-                                                                                    |___/      \s""".indent(1));
+                                                                                    |___/      \u001B[0m\s""".indent(1));
         System.out.println("Welcome to book manager !");
+        System.out.println();
     }
     
     private void DisplayAppAction(){
-        System.out.println("Select one of the following option");
-        System.out.println("(1) User");
-        System.out.println("(2) Book");
-        System.out.println("(0) Leave application");
+        System.out.println("\033[1;34mPlease, select one of the following options :\u001B[0m");
+        System.out.println("\u001B[34m(1)\u001B[0m User");
+        System.out.println("\u001B[34m(2)\u001B[0m Book");
+        System.out.println("\u001B[34m(0)\u001B[0m Leave application");
     }
     
     private AppAction HandleAppAction(){

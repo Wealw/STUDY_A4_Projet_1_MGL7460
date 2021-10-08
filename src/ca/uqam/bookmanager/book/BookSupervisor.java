@@ -40,16 +40,16 @@ public class BookSupervisor extends Supervisor
     
     private void DisplayBookMenuOption(UserRole role)
     {
-        System.out.println("Please select one of the following :");
-        System.out.println("(1) Display all books");
-        System.out.println("(2) Search for books");
+        System.out.println("\033[1;34mPlease, select one of the following options:\033[0m");
+        System.out.println("\033[0;34m(1)\033[0m Display all books");
+        System.out.println("\033[0;34m(2)\033[0m Search for books");
         if (role == UserRole.LIBRARIAN || role == UserRole.ADMINISTRATOR)
         {
-            System.out.println("(3) Add a new book ");
-            System.out.println("(4) Update a book");
-            System.out.println("(5) Delete a book");
+            System.out.println("\033[0;34m(3)\033[0m Add a new book ");
+            System.out.println("\033[0;34m(4)\033[0m Update a book");
+            System.out.println("\033[0;34m(5)\033[0m Delete a book");
         }
-        System.out.println("(0) Leave");
+        System.out.println("\033[0;34m(0)\033[0m Leave");
     }
     
     private BookHomeAction HandleBookMenuOption(UserRole role)
@@ -72,12 +72,13 @@ public class BookSupervisor extends Supervisor
     
     private void DisplayAllBook()
     {
-        System.out.println("A list of all the book in the database :");
+        System.out.println("\033[1;34mA list of all the book in the database :\033[0m");
         Book[] books = bookProvider.ReadAllBook();
         for (Book book : books)
         {
             System.out.println(book.ToString());
         }
+        System.out.println();
     }
     
     private void SearchMenu()
@@ -102,13 +103,13 @@ public class BookSupervisor extends Supervisor
     
     private void DisplaySearchOption()
     {
-        System.out.println("please select one of the following option :");
-        System.out.println("(1) Search by Id");
-        System.out.println("(2) Search by title");
-        System.out.println("(3) Search by author");
-        System.out.println("(4) Search by description");
-        System.out.println("(5) Search by ISBN");
-        System.out.println("(0) Leave ");
+        System.out.println("\033[1;34mPlease, select one of the following options :\033[0m");
+        System.out.println("\033[0;34m(1)\033[0m Search by Id");
+        System.out.println("\033[0;34m(2)\033[0m Search by title");
+        System.out.println("\033[0;34m(3)\033[0m Search by author");
+        System.out.println("\033[0;34m(4)\033[0m Search by description");
+        System.out.println("\033[0;34m(5)\033[0m Search by ISBN");
+        System.out.println("\033[0;34m(0)\033[0m Leave ");
     }
     
     private BookSearchAction HandleSearchOption()
@@ -128,7 +129,7 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("Enter an ID :");
+            System.out.println("\033[1;34mEnter an ID :\033[0m");
             int  input  = Integer.parseInt(scanner.nextLine());
             Book result = bookProvider.ReadBook(input);
             if (result != null)
@@ -137,60 +138,66 @@ public class BookSupervisor extends Supervisor
             }
             else
             {
-                System.out.println("\u001B[31mNo book found with the entered ID\u001B[0m");
+                System.out.println("\033[1;31mNo book found with the entered ID\033[0m");
             }
             
         }
         catch (NumberFormatException e)
         {
-            System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
+            System.out.println("\033[1;31mYou entered an invalid number\033[0m");
         }
     }
     private void SearchByTitle()
     {
-        System.out.println("Enter an title or a fragment :");
+        System.out.println("\033[1;34mEnter an title or a fragment :\033[0m");
         String input   = scanner.nextLine();
         Book[] results = bookProvider.SearchBookByTitle(input);
         if (results == null)
         {
-            System.out.println("\u001B[31mNo book found with the entered Title\u001B[0m");
+            System.out.println("\033[1;31mNo book found with the entered Title\033[0m");
         }
         else
         {
+            System.out.println("\033[1;34mResult :\033[0m");
             for (Book book : results)
             {
                 System.out.println(book.ToString());
             }
+            System.out.println();
         }
     }
     private void SearchByAuthor()
     {
-        System.out.println("Enter an author or a fragment :");
+        System.out.println("\033[1;34mEnter an author or a fragment :\033[0m");
         String input   = scanner.nextLine();
         Book[] results = bookProvider.SearchBookByAuthor(input);
+        System.out.println("\033[1;34mResult :\033[0m");
         if (results == null)
         {
-            System.out.println("\u001B[31mNo book found with the entered Author\u001B[0m");
+            System.out.println("\033[1;31mNo book found with the entered Author\033[0m");
         }
         else
         {
+            System.out.println("\033[1;34mResult :\033[0m");
             for (Book book : results)
             {
                 System.out.println(book.ToString());
             }
+            System.out.println();
         }
     }
     private void SearchByDescription()
     {
-        System.out.println("Enter a description or a fragment :");
+        System.out.println("\033[1;34mEnter a description or a fragment :\033[0m");
         String input   = scanner.nextLine();
         Book[] results = bookProvider.SearchBookByDescription(input);
         if (results == null)
         {
-            System.out.println("\u001B[31mNo book found with the entered Description\u001B[0m");
+            System.out.println("\033[1;31mNo book found with the entered Description\033[0m");
         }
         else
         {
+            System.out.println("\033[1;34mResults :\033[0m");
             for (Book book : results)
             {
                 System.out.println(book.ToString());
@@ -201,24 +208,26 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("Enter an ISBN or a fragment :");
+            System.out.println("\033[1;34mEnter an ISBN or a fragment :\033[0m");
             int    input   = Integer.parseInt(scanner.nextLine());
             Book[] results = bookProvider.SearchBookByIsbn(input);
             if (results == null)
             {
-                System.out.println("\u001B[31mNo book found with the entered ISBN\u001B[0m");
+                System.out.println("\033[1;31mNo book found with the entered ISBN\033[0m");
             }
             else
             {
+                System.out.println("\033[1;34mResult :\033[0m");
                 for (Book book : results)
                 {
                     System.out.println(book.ToString());
                 }
+                System.out.println();
             }
         }
         catch (NumberFormatException e)
         {
-            System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
+            System.out.println("\033[1;31mYou entered an invalid number\033[0m");
         }
     }
     
@@ -226,21 +235,21 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("\u001B[34mTitle :\u001B[0m");
+            System.out.println("\033[1;34mTitle :\033[0m");
             String title = scanner.nextLine();
-            System.out.println("\u001B[34mAuthor :\u001B[0m");
+            System.out.println("\033[1;34mAuthor :\033[0m");
             String author = scanner.nextLine();
-            System.out.println("\u001B[34mDescription :\u001B[0m");
+            System.out.println("\033[1;34mDescription :\033[0m");
             String description = scanner.nextLine();
-            System.out.println("\u001B[34mISBN :\u001B[0m");
+            System.out.println("\033[1;34mISBN :\033[0m");
             int isbn = Integer.parseInt(scanner.nextLine());
-            System.out.println("\u001B[34mQuantity :\u001B[0m");
+            System.out.println("\033[1;34mQuantity :\033[0m");
             int quantity = Integer.parseInt(scanner.nextLine());
             bookProvider.CreateBook(title, author, description, isbn, quantity);
         }
         catch (Exception e)
         {
-            System.out.println("\u001B[31mThere was an error during the creation of the book, please refer to the manual or the application developer\u001B[0m");
+            System.out.println("\033[1;31mThere was an error during the creation of the book, please refer to the manual or the application developer.\033[0m");
         }
         
     }
@@ -249,17 +258,17 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("Enter the id of the book you want to update :");
+            System.out.println("\033[1;34mEnter the id of the book you want to update :");
             Book book = bookProvider.ReadBook(Integer.parseInt(scanner.nextLine()));
             if (book != null)
             {
-                System.out.printf("\u001B[34mTitle :\u001B[0m (leave blank for no change) (current : %s)", book.getTitle());
+                System.out.printf("\033[1;34mTitle :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getTitle());
                 String title = scanner.nextLine();
-                System.out.printf("\u001B[34mAuthor :\u001B[0m (leave blank for no change) (current : %s)", book.getAuthor());
+                System.out.printf("\033[1;34mmAuthor :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getAuthor());
                 String author = scanner.nextLine();
-                System.out.printf("\u001B[34mDescription :\u001B[0m (leave blank for no change) (current : %s)", book.getDescription());
+                System.out.printf("\033[1;34mDescription :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getDescription());
                 String description = scanner.nextLine();
-                System.out.printf("\u001B[34mISBN :\u001B[0m (leave blank for no change) (current : %d)", book.getIsbn());
+                System.out.printf("\033[1;34mISBN :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %d)\033[0m \033[1;34m:\\033[0m", book.getIsbn());
                 int isbn;
                 try
                 {
@@ -269,7 +278,7 @@ public class BookSupervisor extends Supervisor
                 {
                     isbn = book.getIsbn();
                 }
-                System.out.printf("\u001B[34mQuantity :\u001B[0m (leave blank for no change) (current : %s)", book.getQuantity());
+                System.out.printf("\033[1;34mQuantity :\033[0m \033[1;31m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getQuantity());
                 int quantity;
                 try
                 {
@@ -280,12 +289,12 @@ public class BookSupervisor extends Supervisor
                     quantity = book.getQuantity();
                 }
                 Book temp = new Book(title, author, description, isbn, quantity);
-                System.out.println("This is the updated book :");
+                System.out.println("\033[0;32mThis is the updated book :\033[0m");
                 System.out.println(temp.ToString());
                 String answer = "";
                 while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
                 {
-                    System.out.println("\u001B[33mAre you sure you want to update this book ? (Y/N)\u001B[0m");
+                    System.out.println("\033[1;33mAre you sure you want to update this book ? (Y/N)\033[0m");
                     answer = scanner.nextLine();
                     if (Objects.equals(answer, "Y"))
                         bookProvider.DeleteBook(book.getId());
@@ -300,12 +309,12 @@ public class BookSupervisor extends Supervisor
             }
             else
             {
-                System.out.println("\u001B[31mThe book you are trying to update doesn't exist\u001B[0m");
+                System.out.println("\033[1;31mThe book you are trying to update doesn't exist\033[0m");
             }
         }
         catch (Exception e)
         {
-            System.out.println("\u001B[31mThere was an error during the deletion of the book, please refer to the manual or the application developer\u001B[0m");
+            System.out.println("\033[1;31mThere was an error during the deletion of the book, please refer to the manual or the application developer\033[0m");
         }
     }
     
@@ -313,16 +322,16 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("Enter the id of the book you want to delete :");
+            System.out.println("\033[1;33mEnter the id of the book you want to delete :\033[0m");
             Book book = bookProvider.ReadBook(Integer.parseInt(scanner.nextLine()));
             if (book != null)
             {
-                System.out.println("This is the book you asked for deletion :");
+                System.out.println("\033[1;31mThis is the book you asked for deletion :\033[0m");
                 System.out.println(book.ToString());
                 String answer = "";
                 while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
                 {
-                    System.out.println("\u001B[33mAre you sure you want to delete this book ? (Y/N)\u001B[0m");
+                    System.out.println("\\033[1;33mAre you sure you want to delete this book ? (Y/N)\033[0m");
                     answer = scanner.nextLine();
                     if (Objects.equals(answer, "Y"))
                         bookProvider.DeleteBook(book.getId());
@@ -330,12 +339,12 @@ public class BookSupervisor extends Supervisor
             }
             else
             {
-                System.out.println("\u001B[31mThe book you are trying to delete doesn't exist\u001B[0m");
+                System.out.println("\033[1;31mThe book you are trying to delete doesn't exist\033[0m");
             }
         }
         catch (Exception e)
         {
-            System.out.println("\u001B[31mThere was an error during the deletion of the book, please refer to the manual or the application developer\u001B[0m");
+            System.out.println("\033[1;31mThere was an error during the deletion of the book, please refer to the manual or the application developer\033[0m");
         }
     }
     
