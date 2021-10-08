@@ -129,7 +129,7 @@ public class UserSupervisor extends Supervisor
         try
         {
             UserMenuAction action = UserMenuAction.values()[Integer.parseInt(scanner.nextLine())];
-            if (role != UserRole.ADMINISTRATOR && action != UserMenuAction.EDIT_CURRENT)
+            if (role != UserRole.ADMINISTRATOR && !(action == UserMenuAction.EDIT_CURRENT || action == UserMenuAction.QUIT))
             {
                 return null;
             }
