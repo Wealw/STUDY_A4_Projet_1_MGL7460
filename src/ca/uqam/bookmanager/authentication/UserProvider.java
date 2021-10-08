@@ -20,9 +20,12 @@ public class UserProvider implements IUserProvider
     @Override
     public User CreateUser(String username, String passwordHash, UserRole role)
     {
+        if (null != RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';"))
+        {
+            return null;
+        }
         RequestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
-        return null;
-        
+        return RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';");
     }
     @Override
     public User[] ReadAllUser()
@@ -32,8 +35,7 @@ public class UserProvider implements IUserProvider
     @Override
     public User ReadUser(int id)
     {
-        RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
-        return null;
+        return RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
     }
     @Override
     
@@ -54,22 +56,22 @@ public class UserProvider implements IUserProvider
     @Override
     public User[] SearchUserByUsername(String username)
     {
-        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE " + username + ";");
+        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
     }
     @Override
     public User[] SearchUserByRole(UserRole role)
     {
-        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name()+ "';");
+        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
     }
     
     private User[] RequestBookWithMultipleOutcome(String sql)
     {
         try
         {
-            Statement       statement = dataSource.getDatabase()
-                                                  .createStatement();
-            ResultSet       rs        = statement.executeQuery(sql);
-            ArrayList<User> users     = new ArrayList<>();
+            Statement statement = dataSource.getDatabase()
+                                            .createStatement();
+            ResultSet       rs    = statement.executeQuery(sql);
+            ArrayList<User> users = new ArrayList<>();
             while (rs.next())
             {
                 users.add(new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role"))));
@@ -88,7 +90,7 @@ public class UserProvider implements IUserProvider
         {
             Statement statement = dataSource.getDatabase()
                                             .createStatement();
-            ResultSet rs        = statement.executeQuery(sql);
+            ResultSet rs = statement.executeQuery(sql);
             return new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
             
         }
@@ -108,7 +110,6 @@ public class UserProvider implements IUserProvider
         }
         catch (SQLException e)
         {
-            System.out.println("There was an error when executing the query");
         }
     }
     

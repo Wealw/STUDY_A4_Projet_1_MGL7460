@@ -56,7 +56,7 @@ public class BookProvider implements IBookProvider
     @Override
     public Book[] SearchBookByDescription(String description)
     {
-        return RequestBookWithMultipleOutcome("SELECT * FROM Book WHERE Description LIKE " + description + ";");
+        return RequestBookWithMultipleOutcome("SELECT * FROM Book WHERE Description LIKE '" + description + "';");
     }
     @Override
     public Book[] SearchBookByIsbn(int isbn){
