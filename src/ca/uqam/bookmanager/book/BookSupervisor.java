@@ -262,13 +262,13 @@ public class BookSupervisor extends Supervisor
             Book book = bookProvider.ReadBook(Integer.parseInt(scanner.nextLine()));
             if (book != null)
             {
-                System.out.printf("\033[1;34mTitle :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getTitle());
+                System.out.printf("\033[1;34mTitle :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getTitle());
                 String title = scanner.nextLine();
-                System.out.printf("\033[1;34mmAuthor :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getAuthor());
+                System.out.printf("\033[1;34mmAuthor :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getAuthor());
                 String author = scanner.nextLine();
-                System.out.printf("\033[1;34mDescription :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\\033[0m", book.getDescription());
+                System.out.printf("\033[1;34mDescription :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getDescription());
                 String description = scanner.nextLine();
-                System.out.printf("\033[1;34mISBN :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %d)\033[0m \033[1;34m:\\033[0m", book.getIsbn());
+                System.out.printf("\033[1;34mISBN :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %d)\033[0m \033[1;34m:\033[0m", book.getIsbn());
                 int isbn;
                 try
                 {
@@ -278,7 +278,7 @@ public class BookSupervisor extends Supervisor
                 {
                     isbn = book.getIsbn();
                 }
-                System.out.printf("\033[1;34mQuantity :\033[0m \033[1;31m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getQuantity());
+                System.out.printf("\033[1;34mQuantity :\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[0m \033[1;34m:\033[0m", book.getQuantity());
                 int quantity;
                 try
                 {
@@ -288,24 +288,25 @@ public class BookSupervisor extends Supervisor
                 {
                     quantity = book.getQuantity();
                 }
-                Book temp = new Book(title, author, description, isbn, quantity);
-                System.out.println("\033[0;32mThis is the updated book :\033[0m");
-                System.out.println(temp.ToString());
-                String answer = "";
-                while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
-                {
-                    System.out.println("\033[1;33mAre you sure you want to update this book ? (Y/N)\033[0m");
-                    answer = scanner.nextLine();
-                    if (Objects.equals(answer, "Y"))
-                        bookProvider.DeleteBook(book.getId());
-                }
                 if (!Objects.equals(title, ""))
                     book.setTitle(title);
                 if (!Objects.equals(author, ""))
                     book.setAuthor(author);
                 if (!Objects.equals(description, ""))
                     book.setDescription(description);
-                bookProvider.UpdateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getIsbn(), book.getQuantity());
+                book.setQuantity(quantity);
+                book.setIsbn(isbn);
+                System.out.println("\033[0;32mThis is the updated book :\033[0m");
+                System.out.println(book.ToString());
+                String answer = "";
+                while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
+                {
+                    System.out.println("\033[1;33mAre you sure you want to update this book ? (Y/N)\033[0m");
+                    answer = scanner.nextLine();
+                    if (Objects.equals(answer, "Y"))
+                        bookProvider.UpdateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getIsbn(), book.getQuantity());
+                }
+
             }
             else
             {
@@ -314,7 +315,7 @@ public class BookSupervisor extends Supervisor
         }
         catch (Exception e)
         {
-            System.out.println("\033[1;31mThere was an error during the deletion of the book, please refer to the manual or the application developer\033[0m");
+            System.out.println("\033[1;31mThere was an error during the updating of the book, please refer to the manual or the application developer\033[0m");
         }
     }
     
