@@ -13,11 +13,11 @@ public class Database implements IDataSource
     {
         try
         {
-            database = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            database = DriverManager.getConnection("jdbc:sqlite:database_test/database.sqlite");
         }
         catch (SQLException e)
         {
-            System.out.println("There was an arror when connecting to the database please refer to the developer");
+            System.out.println("There was an error when connecting to the database please refer to the developer");
             System.exit(1);
         }
     }

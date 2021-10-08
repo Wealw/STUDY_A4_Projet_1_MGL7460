@@ -31,6 +31,22 @@ public class User
         }
     }
     
+    public User(int id, String username, String passwordHash, UserRole role){
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        try
+        {
+            messageDigest = MessageDigest.getInstance("SHA-512");
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            System.out.print("Missing algorithm for password hashing, please refer to the developer.");
+            System.exit(1);
+        }
+        this.setId(id);
+    }
+    
     private String hashString(String string)
     {
         final byte[]  bytes = messageDigest.digest(string.getBytes(StandardCharsets.UTF_8));
