@@ -140,12 +140,12 @@ public class BookSupervisor extends Supervisor
             {
                 System.out.println("\033[1;31mNo book found with the entered ID\033[0m");
             }
-            
         }
         catch (NumberFormatException e)
         {
             System.out.println("\033[1;31mYou entered an invalid number\033[0m");
         }
+        System.out.println();
     }
     private void SearchByTitle()
     {
@@ -163,8 +163,8 @@ public class BookSupervisor extends Supervisor
             {
                 System.out.println(book.ToString());
             }
-            System.out.println();
         }
+        System.out.println();
     }
     private void SearchByAuthor()
     {
@@ -183,8 +183,8 @@ public class BookSupervisor extends Supervisor
             {
                 System.out.println(book.ToString());
             }
-            System.out.println();
         }
+        System.out.println();
     }
     private void SearchByDescription()
     {
@@ -203,6 +203,7 @@ public class BookSupervisor extends Supervisor
                 System.out.println(book.ToString());
             }
         }
+        System.out.println();
     }
     private void SearchByIsbn()
     {
@@ -222,8 +223,8 @@ public class BookSupervisor extends Supervisor
                 {
                     System.out.println(book.ToString());
                 }
-                System.out.println();
             }
+            System.out.println();
         }
         catch (NumberFormatException e)
         {

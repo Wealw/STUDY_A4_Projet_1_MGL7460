@@ -57,7 +57,7 @@ public class UserSupervisor extends Supervisor
         System.out.println("\033[1;34mEnter your username :\033[0m");
         String username = this.scanner.nextLine();
         System.out.println("\033[1;34mEnter your password :\033[0m");
-        String  password = this.scanner.nextLine();
+        String password   = this.scanner.nextLine();
         User   userObject = userProvider.ReadUser(username);
         if (userObject != null && userObject.verifyPassword(password))
         {
@@ -83,7 +83,14 @@ public class UserSupervisor extends Supervisor
         }
         User userObject = userProvider.CreateUser(username, password, UserRole.NORMAL);
         if (userObject == null)
+        {
             System.out.println("\033[1;31mThere was an error during the creation of your user profile, your username is already in use. Please use another one. \033[0m");
+        }
+        else
+        {
+            System.out.println("\033[0;32m Succesfully signed and loged in as " + userObject.getUsername() + "\033[0m");
+        }
+        System.out.println();
         return userObject;
     }
     
@@ -213,7 +220,10 @@ public class UserSupervisor extends Supervisor
                     choice = Integer.parseInt(scanner.nextLine());
                 }
                 UserRole role = UserRole.values()[choice];
-                userProvider.CreateUser(username, password, role);
+                User userObject = userProvider.CreateUser(username, password, role);
+                if (userObject == null){
+                    System.out.println("\u001B[31mThe username provided is already in use.\u001B[0m");
+                }
             }
             else
             {
