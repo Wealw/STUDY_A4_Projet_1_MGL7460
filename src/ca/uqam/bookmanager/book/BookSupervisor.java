@@ -323,16 +323,16 @@ public class BookSupervisor extends Supervisor
     {
         try
         {
-            System.out.println("\033[1;33mEnter the id of the book you want to delete :\033[0m");
+            System.out.println("\033[1;34mEnter the id of the book you want to delete :\033[0m");
             Book book = bookProvider.ReadBook(Integer.parseInt(scanner.nextLine()));
             if (book != null)
             {
-                System.out.println("\033[1;31mThis is the book you asked for deletion :\033[0m");
+                System.out.println("\033[1;32mThis is the book you asked for deletion :\033[0m");
                 System.out.println(book.ToString());
                 String answer = "";
                 while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N")))
                 {
-                    System.out.println("\\033[1;33mAre you sure you want to delete this book ? (Y/N)\033[0m");
+                    System.out.println("\033[1;31mAre you sure you want to delete this book ? (Y/N)\033[0m");
                     answer = scanner.nextLine();
                     if (Objects.equals(answer, "Y"))
                         bookProvider.DeleteBook(book.getId());
