@@ -32,8 +32,7 @@ public class UserProvider implements IUserProvider
     @Override
     public User ReadUser(int id)
     {
-        RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
-        return null;
+        return RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
     }
     @Override
     
