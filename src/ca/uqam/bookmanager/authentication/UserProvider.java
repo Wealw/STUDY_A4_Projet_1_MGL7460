@@ -2,8 +2,14 @@ package ca.uqam.bookmanager.authentication;
 
 import ca.uqam.bookmanager.database.IDataSource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 public class UserProvider implements IUserProvider
 {
+    
     IDataSource dataSource;
     
     public UserProvider(IDataSource dataSource)
@@ -14,47 +20,96 @@ public class UserProvider implements IUserProvider
     @Override
     public User CreateUser(String username, String passwordHash, UserRole role)
     {
-        // TODO : Write SLQ request
+        RequestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
         return null;
-
+        
     }
     @Override
     public User[] ReadAllUser()
     {
-        // TODO : Write SLQ request
-        return new User[0];
+        return RequestBookWithMultipleOutcome("SELECT * FROM USER;");
     }
     @Override
     public User ReadUser(int id)
     {
-        // TODO : Write SLQ request
+        RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
         return null;
     }
     @Override
-
-    public User ReadUser(String username){
-        return new User("test","ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",UserRole.ADMINISTRATOR);
+    
+    public User ReadUser(String username)
+    {
+        return RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName = '" + username + "';");
     }
     @Override
     public void UpdateUser(int id, String username, String passwordHash, UserRole role)
     {
-        // TODO : Write SLQ request
+        RequestWithNoOutcome("UPDATE User SET UserName = '" + username + "', Password_Hash = '" + passwordHash + "', Role ='" + role.name() + "' WHERE Id =" + id + ";");
     }
     @Override
     public void DeleteUser(int id)
     {
-        // TODO : Write SLQ request
+        RequestWithNoOutcome("DELETE FROM User WHERE Id = " + id + ";");
     }
     @Override
     public User[] SearchUserByUsername(String username)
     {
-        // TODO : Write SLQ request
-        return new User[0];
+        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE " + username + ";");
     }
     @Override
     public User[] SearchUserByRole(UserRole role)
     {
-        return new User[0];
+        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name()+ "';");
+    }
+    
+    private User[] RequestBookWithMultipleOutcome(String sql)
+    {
+        try
+        {
+            Statement       statement = dataSource.getDatabase()
+                                                  .createStatement();
+            ResultSet       rs        = statement.executeQuery(sql);
+            ArrayList<User> users     = new ArrayList<>();
+            while (rs.next())
+            {
+                users.add(new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role"))));
+            }
+            return users.toArray(new User[0]);
+        }
+        catch (SQLException e)
+        {
+            return new User[0];
+        }
+    }
+    
+    private User RequestBookWithOneOutcome(String sql)
+    {
+        try
+        {
+            Statement statement = dataSource.getDatabase()
+                                            .createStatement();
+            ResultSet rs        = statement.executeQuery(sql);
+            return new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
+            
+        }
+        catch (SQLException e)
+        {
+            return null;
+        }
+    }
+    
+    private void RequestWithNoOutcome(String sql)
+    {
+        try
+        {
+            Statement statement = dataSource.getDatabase()
+                                            .createStatement();
+            statement.execute(sql);
+        }
+        catch (SQLException e)
+        {
+            System.out.println("There was an error when executing the query");
+        }
     }
     
 }
