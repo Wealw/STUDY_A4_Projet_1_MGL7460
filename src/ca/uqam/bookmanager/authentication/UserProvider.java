@@ -7,109 +7,85 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class UserProvider implements IUserProvider
-{
+public class UserProvider implements IUserProvider {
     
-    IDataSource dataSource;
+    private final IDataSource dataSource;
     
-    public UserProvider(IDataSource dataSource)
-    {
+    public UserProvider(IDataSource dataSource) {
         this.dataSource = dataSource;
     }
     
     @Override
-    public User CreateUser(String username, String passwordHash, UserRole role)
-    {
-        if (null != RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';"))
-        {
+    public User createUser(String username, String passwordHash, UserRole role) {
+        if (null != requestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';")) {
             return null;
         }
-        RequestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
-        return RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';");
+        requestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
+        return requestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';");
     }
     @Override
-    public User[] ReadAllUser()
-    {
+    public User[] readAllUser() {
         return RequestBookWithMultipleOutcome("SELECT * FROM USER;");
     }
     @Override
-    public User ReadUser(int id)
-    {
-        return RequestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
+    public User readUser(int id) {
+        return requestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
     }
     @Override
     
-    public User ReadUser(String username)
-    {
-        return RequestBookWithOneOutcome("SELECT * FROM User WHERE UserName = '" + username + "';");
+    public User readUser(String username) {
+        return requestBookWithOneOutcome("SELECT * FROM User WHERE UserName = '" + username + "';");
     }
     @Override
-    public void UpdateUser(int id, String username, String passwordHash, UserRole role)
-    {
-        RequestWithNoOutcome("UPDATE User SET UserName = '" + username + "', Password_Hash = '" + passwordHash + "', Role ='" + role.name() + "' WHERE Id =" + id + ";");
+    public void updateUser(int id, String username, String passwordHash, UserRole role) {
+        requestWithNoOutcome("UPDATE User SET UserName = '" + username + "', Password_Hash = '" + passwordHash + "', Role ='" + role.name() + "' WHERE Id =" + id + ";");
     }
     @Override
-    public void DeleteUser(int id)
-    {
-        RequestWithNoOutcome("DELETE FROM User WHERE Id = " + id + ";");
+    public void deleteUser(int id) {
+        requestWithNoOutcome("DELETE FROM User WHERE Id = " + id + ";");
     }
     @Override
-    public User[] SearchUserByUsername(String username)
-    {
+    public User[] searchUserByUsername(String username) {
         return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
     }
     @Override
-    public User[] SearchUserByRole(UserRole role)
-    {
+    public User[] searchUserByRole(UserRole role) {
         return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
     }
     
-    private User[] RequestBookWithMultipleOutcome(String sql)
-    {
-        try
-        {
+    private User[] RequestBookWithMultipleOutcome(String sql) {
+        try {
             Statement statement = dataSource.getDatabase()
                                             .createStatement();
             ResultSet       rs    = statement.executeQuery(sql);
             ArrayList<User> users = new ArrayList<>();
-            while (rs.next())
-            {
+            while (rs.next()) {
                 users.add(new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role"))));
             }
             return users.toArray(new User[0]);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             return new User[0];
         }
     }
     
-    private User RequestBookWithOneOutcome(String sql)
-    {
-        try
-        {
+    private User requestBookWithOneOutcome(String sql) {
+        try {
             Statement statement = dataSource.getDatabase()
                                             .createStatement();
             ResultSet rs = statement.executeQuery(sql);
             return new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
             
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             return null;
         }
     }
     
-    private void RequestWithNoOutcome(String sql)
-    {
-        try
-        {
+    private void requestWithNoOutcome(String sql) {
+        try {
             Statement statement = dataSource.getDatabase()
                                             .createStatement();
             statement.execute(sql);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
         }
     }
     

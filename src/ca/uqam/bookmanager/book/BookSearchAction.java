@@ -1,11 +1,10 @@
 package ca.uqam.bookmanager.book;
 
-public enum BookSearchAction
-{
+public enum BookSearchAction {
     QUIT,
-    BYID,
-    BYTITLE,
-    BYAUTHOR,
-    BYDESCRIPTION,
-    BYISBN
+    BY_ID,
+    BY_TITLE,
+    BY_AUTHOR,
+    BY_DESCRIPTION,
+    BY_ISBN
 }

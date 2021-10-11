@@ -1,7 +1,6 @@
 package ca.uqam.bookmanager.authentication;
 
-public enum UserSearchAction
-{
+public enum UserSearchAction {
     QUIT,
     BY_USERNAME,
     BY_ROLE

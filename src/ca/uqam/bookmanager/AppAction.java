@@ -1,9 +1,7 @@
 package ca.uqam.bookmanager;
 
-public enum AppAction
-{
+public enum AppAction {
     QUIT,
     USER,
     BOOK,
-
 }
