@@ -6,16 +6,32 @@ import ca.uqam.bookmanager.database.IDataSource;
 
 import java.util.Objects;
 
+/**
+ * Display handle and execute action related to user
+ */
 public class UserSupervisor extends AbstractSupervisor {
     
+    /**
+     * User provider instance.
+     */
     private final IUserProvider userProvider;
     
+    /**
+     * Define the basic parameter of the user supervisor class.
+     *
+     * @param datasource Datasource
+     */
     public UserSupervisor(IDataSource datasource) {
         super();
         this.userProvider = new UserProvider(datasource);
     }
     
-    public User AuthenticationMenu() {
+    /**
+     * Authenticate the user by either log in or sign up.
+     *
+     * @return User
+     */
+    public User authenticationMenu() {
         UserHomeAction userAction = null;
         User           user       = null;
         while (userAction == null || (userAction != UserHomeAction.QUIT && user == null)) {
@@ -29,6 +45,9 @@ public class UserSupervisor extends AbstractSupervisor {
         return user;
     }
     
+    /**
+     * Display authentication menu options.
+     */
     private void displayAuthenticationMenuOption() {
         System.out.println("\033[1;34mPlease, select one of the following options :\033[0m");
         System.out.println("\033[0;34m(1)\033[0m Log In");
@@ -36,20 +55,33 @@ public class UserSupervisor extends AbstractSupervisor {
         System.out.println("\033[0;34m(0)\033[0m Leave BookManager");
     }
     
+    /**
+     * Handle authentication menu options.
+     *
+     * @return User home action
+     */
     private UserHomeAction handleAuthenticationMenuOption() {
         try {
-            return UserHomeAction.values()[Integer.parseInt(this.scanner.nextLine())];
+            return UserHomeAction.values()[Integer.parseInt(this.getScanner()
+                                                                .nextLine())];
         } catch (Exception e) {
             return null;
         }
     }
     
+    /**
+     * Log in with an axisting account
+     *
+     * @return User
+     */
     private User logIn() {
         System.out.println("\033[1;34mEnter your username :\033[0m");
-        String username = this.scanner.nextLine();
+        String username = this.getScanner()
+                              .nextLine();
         System.out.println("\033[1;34mEnter your password :\033[0m");
-        String password   = this.scanner.nextLine();
-        User   userObject = userProvider.readUser(username);
+        String password = this.getScanner()
+                              .nextLine();
+        User userObject = userProvider.readUser(username);
         if (userObject != null && userObject.verifyPassword(password)) {
             System.out.println("\033[0;32mSuccessfully logged in as " + username + ".\033[0m");
             return userObject;
@@ -58,13 +90,21 @@ public class UserSupervisor extends AbstractSupervisor {
         return null;
     }
     
+    /**
+     * Create a new account and log in
+     *
+     * @return User
+     */
     private User signUp() {
         System.out.println("\033[1;34mEnter your new username :\033[0m");
-        String username = this.scanner.nextLine();
+        String username = this.getScanner()
+                              .nextLine();
         System.out.println("\033[1;34mEnter your new password :\033[0m");
-        String password = this.scanner.nextLine();
+        String password = this.getScanner()
+                              .nextLine();
         System.out.println("\033[1;34mRe enter your password for confirmation:\033[0m");
-        String passwordConfirmation = this.scanner.nextLine();
+        String passwordConfirmation = this.getScanner()
+                                          .nextLine();
         if (!Objects.equals(password, passwordConfirmation)) {
             System.out.println("\033[1;31mYour password and its confirmation didn't match.\033[0m");
             return null;
@@ -80,6 +120,11 @@ public class UserSupervisor extends AbstractSupervisor {
         return userObject;
     }
     
+    /**
+     * Display and handle the user management menu.
+     *
+     * @param user User object for context
+     */
     public void userMenu(User user) {
         UserMenuAction action = null;
         while (action != UserMenuAction.QUIT) {
@@ -106,6 +151,11 @@ public class UserSupervisor extends AbstractSupervisor {
         }
     }
     
+    /**
+     * Diplay the option for the user management menu.
+     *
+     * @param role User role for context
+     */
     private void displayUserMenuOption(UserRole role) {
         System.out.println("\033[1;34mPlease select one of the following option :\033[0m");
         System.out.println("\033[0;34m(1)\033[0m Edit current user");
@@ -119,9 +169,16 @@ public class UserSupervisor extends AbstractSupervisor {
         System.out.println("\033[0;34m(0)\033[0m Leave");
     }
     
+    /**
+     * Handle the option for the user management menu.
+     *
+     * @param role User role for context
+     * @return User management menu action
+     */
     private UserMenuAction handleUserMenuOption(UserRole role) {
         try {
-            UserMenuAction action = UserMenuAction.values()[Integer.parseInt(scanner.nextLine())];
+            UserMenuAction action = UserMenuAction.values()[Integer.parseInt(this.getScanner()
+                                                                                 .nextLine())];
             if (role != UserRole.ADMINISTRATOR && !(action == UserMenuAction.EDIT_CURRENT || action == UserMenuAction.QUIT)) {
                 return null;
             }
@@ -131,13 +188,21 @@ public class UserSupervisor extends AbstractSupervisor {
         }
     }
     
+    /**
+     * Edit the specified user.
+     *
+     * @param user User object for context
+     */
     private void editUser(User user) {
         System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m \n", user.getUsername());
-        String username = scanner.nextLine();
+        String username = this.getScanner()
+                              .nextLine();
         System.out.println("\033[1;34mEnter a new password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
-        String password = scanner.nextLine();
+        String password = this.getScanner()
+                              .nextLine();
         System.out.println("\033[1;34mConfirm password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
-        String passwordConfirmation = scanner.nextLine();
+        String passwordConfirmation = this.getScanner()
+                                          .nextLine();
         if (!Objects.equals(username, "")) {
             user.setUsername(username);
         }
@@ -152,6 +217,9 @@ public class UserSupervisor extends AbstractSupervisor {
         userProvider.updateUser(user.getId(), user.getUsername(), user.getPasswordHash(), user.getRole());
     }
     
+    /**
+     * Display all users.
+     */
     private void displayAllUsers() {
         System.out.println("\033[1;34mAll users :\033[0m");
         User[] users = userProvider.readAllUser();
@@ -161,6 +229,9 @@ public class UserSupervisor extends AbstractSupervisor {
         System.out.println();
     }
     
+    /**
+     * Display and handle search menu for user.
+     */
     private void searchUser() {
         UserSearchAction action = null;
         while (action != UserSearchAction.QUIT) {
@@ -172,14 +243,21 @@ public class UserSupervisor extends AbstractSupervisor {
                 searchUserByRole();
         }
     }
+    
+    /**
+     * Display and handle user creation.
+     */
     private void createUser() {
         try {
             System.out.println("\033[1;34mEnter a new username :\033[0m");
-            String username = scanner.nextLine();
+            String username = this.getScanner()
+                                  .nextLine();
             System.out.println("\033[1;34mEnter a new password :\033[0m");
-            String password = scanner.nextLine();
+            String password = this.getScanner()
+                                  .nextLine();
             System.out.println("\033[1;34mConfirm password :\033[0m");
-            String passwordConfirmation = scanner.nextLine();
+            String passwordConfirmation = this.getScanner()
+                                              .nextLine();
             if (Objects.equals(password, passwordConfirmation)) {
                 int choice = -1;
                 while (choice < 1 || choice > 3) {
@@ -187,7 +265,8 @@ public class UserSupervisor extends AbstractSupervisor {
                     System.out.println("\033[0;34m(1)\033[0m Normal user");
                     System.out.println("\033[0;34m(2)\033[0m Librarian");
                     System.out.println("\033[0;34m(3)\033[0m Administrator");
-                    choice = Integer.parseInt(scanner.nextLine());
+                    choice = Integer.parseInt(this.getScanner()
+                                                  .nextLine());
                 }
                 UserRole role       = UserRole.values()[choice];
                 User     userObject = userProvider.createUser(username, password, role);
@@ -202,17 +281,25 @@ public class UserSupervisor extends AbstractSupervisor {
             System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
         }
     }
+    
+    /**
+     * Display menu and handle user edition.
+     */
     private void editUser() {
         try {
             System.out.println("\033[1;34mEnter a user id :\033[0m");
-            User user = userProvider.readUser(Integer.parseInt(scanner.nextLine()));
+            User user = userProvider.readUser(Integer.parseInt(this.getScanner()
+                                                                   .nextLine()));
             if (user != null) {
                 System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m \n", user.getUsername());
-                String username = scanner.nextLine();
+                String username = this.getScanner()
+                                      .nextLine();
                 System.out.println("\033[1;34mEnter a new password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
-                String password = scanner.nextLine();
+                String password = this.getScanner()
+                                      .nextLine();
                 System.out.println("\033[1;34mConfirm password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
-                String passwordConfirmation = scanner.nextLine();
+                String passwordConfirmation = this.getScanner()
+                                                  .nextLine();
                 if (!Objects.equals(username, "")) {
                     user.setUsername(username);
                 }
@@ -230,7 +317,8 @@ public class UserSupervisor extends AbstractSupervisor {
                     System.out.println("\033[0;34m(1)\033[0m Normal user");
                     System.out.println("\033[0;34m(2)\033[0m Librarian");
                     System.out.println("\033[0;34m(3)\033[0m Administrator");
-                    choice = Integer.parseInt(scanner.nextLine());
+                    choice = Integer.parseInt(this.getScanner()
+                                                  .nextLine());
                 }
                 user.setRole(UserRole.values()[choice]);
                 userProvider.updateUser(user.getId(), user.getUsername(), user.getPasswordHash(), user.getRole());
@@ -242,10 +330,15 @@ public class UserSupervisor extends AbstractSupervisor {
             System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
         }
     }
+    
+    /**
+     * Display menu and delete user.
+     */
     private void deleteUsers() {
         try {
             System.out.println("\033[1;34mEnter a user id :\033[0m");
-            User user = userProvider.readUser(Integer.parseInt(scanner.nextLine()));
+            User user = userProvider.readUser(Integer.parseInt(this.getScanner()
+                                                                   .nextLine()));
             if (user == null) {
                 System.out.println("\u001B[31mThe user you are trying to delete doesn't exist\u001B[0m");
             }
@@ -255,7 +348,8 @@ public class UserSupervisor extends AbstractSupervisor {
                 String answer = "";
                 while (!(Objects.equals(answer, "Y") || Objects.equals(answer, "N"))) {
                     System.out.println("\033[1;31mAre you sure you want to delete this user ? \033[1;34m(Y/N)\033[0m");
-                    answer = scanner.nextLine();
+                    answer = this.getScanner()
+                                 .nextLine();
                     if (Objects.equals(answer, "Y"))
                         userProvider.deleteUser(user.getId());
                 }
@@ -263,30 +357,49 @@ public class UserSupervisor extends AbstractSupervisor {
         } catch (NumberFormatException e) {
             System.out.println("\033[1;31mYou entered an invalid number\033[0m");
         }
-        
     }
+    
+    /**
+     * Display user search option
+     */
     private void displayUserSearchOption() {
         System.out.println("\033[1;34mPlease, select one of the following options :\033[0m");
         System.out.println("\033[0;34m(1)\033[0m Search by username");
         System.out.println("\033[0;34m(2)\033[0m Search by role");
         System.out.println("\033[0;34m(0)\033[0m Leave");
     }
+    
+    /**
+     * Handle user search menu
+     *
+     * @return User search action
+     */
     private UserSearchAction handleUserSearchOption() {
         try {
-            return UserSearchAction.values()[Integer.parseInt(this.scanner.nextLine())];
+            return UserSearchAction.values()[Integer.parseInt(this.getScanner()
+                                                                  .nextLine())];
         } catch (Exception e) {
             return null;
         }
     }
+    
+    /**
+     * Search user by username
+     */
     public void searchUserByUsername() {
         System.out.println("\033[1;34mEnter a username :\033[0m");
-        User[] users = userProvider.searchUserByUsername(scanner.nextLine());
+        User[] users = userProvider.searchUserByUsername(this.getScanner()
+                                                             .nextLine());
         System.out.println("\033[1;34mResults :\033[0m");
         for (User user : users) {
             System.out.println(user.toString());
         }
         System.out.println();
     }
+    
+    /**
+     * Search user by role
+     */
     public void searchUserByRole() {
         try {
             int choice = -1;
@@ -295,7 +408,8 @@ public class UserSupervisor extends AbstractSupervisor {
                 System.out.println("\033[0;34m(1)\033[0m Normal user");
                 System.out.println("\033[0;34m(2)\033[0m Librarian");
                 System.out.println("\033[0;34m(3)\033[0m Administrator");
-                choice = Integer.parseInt(scanner.nextLine());
+                choice = Integer.parseInt(this.getScanner()
+                                              .nextLine());
             }
             User[] users = userProvider.searchUserByRole(UserRole.values()[choice]);
             System.out.println("\033[1;34mResult :\033[0m");
@@ -307,5 +421,4 @@ public class UserSupervisor extends AbstractSupervisor {
             System.out.println("\033[1;31m[31mYou entered an invalid number\033[0m");
         }
     }
-    
 }

@@ -4,10 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Database class
+ */
 public class Database implements IDataSource {
     
+    /**
+     * Database driver instance.
+     */
     private Connection database;
     
+    /**
+     * Initialize basic attribute of database class
+     */
     public Database() {
         try {
             database = DriverManager.getConnection("jdbc:sqlite:database_test/database.sqlite");
@@ -17,8 +26,12 @@ public class Database implements IDataSource {
         }
     }
     
+    /**
+     * Return a database instance
+     *
+     * @return "Return database"
+     */
     public Connection getDatabase() {
         return database;
     }
-    
 }
