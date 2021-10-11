@@ -1,7 +1,6 @@
 package ca.uqam.bookmanager.authentication;
 
-public enum UserRole
-{
+public enum UserRole {
     DEFAULT,
     NORMAL,
     LIBRARIAN,

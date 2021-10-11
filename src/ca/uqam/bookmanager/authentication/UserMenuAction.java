@@ -1,7 +1,6 @@
 package ca.uqam.bookmanager.authentication;
 
-public enum UserMenuAction
-{
+public enum UserMenuAction {
     QUIT,
     EDIT_CURRENT,
     DISPLAY_ALL,
