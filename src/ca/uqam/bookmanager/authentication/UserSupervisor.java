@@ -91,7 +91,7 @@ public class UserSupervisor extends AbstractSupervisor {
         return null;
     }
     
-    /**
+    /*
      * Create a new account and log in
      *
      * @return User
@@ -110,7 +110,9 @@ public class UserSupervisor extends AbstractSupervisor {
             System.out.println("\033[1;31mYour password and its confirmation didn't match.\033[0m");
             return null;
         }
-        User userObject = userProvider.createUser(username, password, UserRole.NORMAL);
+        User userTemp = new User(username, password, UserRole.NORMAL);
+        userTemp.setPassword(password);
+        User userObject = userProvider.createUser(userTemp.getUsername(), userTemp.getPasswordHash(), userTemp.getRole());
         if (userObject == null) {
             System.out.println("\033[1;31mThere was an error during the creation of your user profile, your username is already in use. Please use another one. \033[0m");
         }
@@ -270,7 +272,9 @@ public class UserSupervisor extends AbstractSupervisor {
                                                   .nextLine());
                 }
                 UserRole role       = UserRole.values()[choice];
-                User     userObject = userProvider.createUser(username, password, role);
+                User userTemp = new User(username,password, role);
+                userTemp.setPassword(password);
+                User     userObject = userProvider.createUser(userTemp.getUsername(), userTemp.getPasswordHash(), userTemp.getRole());
                 if (userObject == null) {
                     System.out.println("\u001B[31mThe username provided is already in use.\u001B[0m");
                 }

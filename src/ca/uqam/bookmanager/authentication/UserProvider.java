@@ -2,9 +2,9 @@ package ca.uqam.bookmanager.authentication;
 
 import ca.uqam.bookmanager.database.IDataSource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -37,11 +37,41 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User createUser(String username, String passwordHash, UserRole role) {
-        if (null != requestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';")) {
+        //if (null != requestUserWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';")) {
+        //    return null;
+        //}
+        //requestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
+        //return requestUserWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';");
+        PreparedStatement statement1;
+        PreparedStatement statement2;
+        PreparedStatement statement3;
+        try {
+            statement1 = dataSource.getConnection()
+                                   .prepareStatement("SELECT * FROM User WHERE UserName = ?;");
+            statement2 = dataSource.getConnection()
+                                   .prepareStatement("INSERT INTO User (UserName, Password_Hash, Role) VALUES (?,?,?);");
+            statement3 = dataSource.getConnection()
+                                   .prepareStatement("SELECT * FROM User WHERE UserName = ? and Password_Hash = ? ;");
+            statement1.setString(1, username);
+            statement2.setString(1, username);
+            statement2.setString(2, passwordHash);
+            statement2.setString(3, role.name());
+            statement3.setString(1, username);
+            statement3.setString(2, passwordHash);
+            if (requestUserWithOneOutcome(statement1) != null) {
+                return null;
+            }
+            requestWithNoOutcome(statement2);
+            User userObject = requestUserWithOneOutcome(statement3);
+            statement1.close();
+            statement2.close();
+            statement3.close();
+            return userObject;
+        } catch (SQLException e) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAH");
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }
-        requestWithNoOutcome("INSERT INTO User (UserName, Password_Hash, Role) VALUES ('" + username + "','" + passwordHash + "','" + role.name() + "');");
-        return requestBookWithOneOutcome("SELECT * FROM User WHERE UserName ='" + username + "', Password_Hash ='" + passwordHash + "';");
     }
     
     /**
@@ -49,7 +79,17 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] readAllUser() {
-        return requestBookWithMultipleOutcome("SELECT * FROM USER;");
+        //return requestUserWithMultipleOutcome("SELECT * FROM USER;");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("SELECT * FROM USER;");
+            User[] userList = requestUserWithMultipleOutcome(statement);
+            statement.close();
+            return userList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new User[0];
+        }
     }
     
     /**
@@ -60,7 +100,18 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User readUser(int id) {
-        return requestBookWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
+        //return requestUserWithOneOutcome("SELECT * FROM User WHERE Id = " + id + ";");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("SELECT * FROM User WHERE Id = ?;");
+            statement.setInt(1, id);
+            User userObject = requestUserWithOneOutcome(statement);
+            statement.close();
+            return userObject;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return null;
+        }
     }
     
     /**
@@ -71,7 +122,18 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User readUser(String username) {
-        return requestBookWithOneOutcome("SELECT * FROM User WHERE UserName = '" + username + "';");
+        //return requestUserWithOneOutcome("SELECT * FROM User WHERE UserName = '" + username + "';");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("SELECT * FROM User WHERE UserName = ?;");
+            statement.setString(1, username);
+            User userObject = requestUserWithOneOutcome(statement);
+            statement.close();
+            return userObject;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return null;
+        }
     }
     
     /**
@@ -84,7 +146,19 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public void updateUser(int id, String username, String passwordHash, UserRole role) {
-        requestWithNoOutcome("UPDATE User SET UserName = '" + username + "', Password_Hash = '" + passwordHash + "', Role ='" + role.name() + "' WHERE Id =" + id + ";");
+        //requestWithNoOutcome("UPDATE User SET UserName = '" + username + "', Password_Hash = '" + passwordHash + "', Role ='" + role.name() + "' WHERE Id =" + id + ";");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("UPDATE User SET UserName = ?, Password_Hash = ?, Role = ? WHERE Id = ?;");
+            statement.setString(1, username);
+            statement.setString(2, passwordHash);
+            statement.setString(3, role.name());
+            statement.setInt(4, id);
+            requestWithNoOutcome(statement);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+        }
     }
     
     /**
@@ -94,7 +168,16 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public void deleteUser(int id) {
-        requestWithNoOutcome("DELETE FROM User WHERE Id = " + id + ";");
+        //requestWithNoOutcome("DELETE FROM User WHERE Id = " + id + ";");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("DELETE FROM User WHERE Id = ? ;");
+            statement.setInt(1, id);
+            requestWithNoOutcome(statement);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+        }
     }
     
     /**
@@ -105,7 +188,18 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] searchUserByUsername(String username) {
-        return requestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
+        //return requestUserWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("SELECT * FROM User WHERE UserName LIKE ? ;");
+            statement.setString(1, username);
+            User[] userList = requestUserWithMultipleOutcome(statement);
+            statement.close();
+            return userList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new User[0];
+        }
     }
     
     /**
@@ -116,7 +210,18 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] searchUserByRole(UserRole role) {
-        return requestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
+        //return requestUserWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
+        try {
+            PreparedStatement statement = dataSource.getConnection()
+                                                    .prepareStatement("SELECT * FROM User WHERE Role LIKE ? ;");
+            statement.setString(1, role.name());
+            User[] userList = requestUserWithMultipleOutcome(statement);
+            statement.close();
+            return userList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new User[0];
+        }
     }
     
     /**
@@ -125,19 +230,17 @@ class UserProvider implements IUserProvider {
      * @param sql SQL query
      * @return Return user list
      */
-    private User[] requestBookWithMultipleOutcome(String sql) {
+    private User[] requestUserWithMultipleOutcome(PreparedStatement sql) {
         try {
-            Statement statement = dataSource.getConnection()
-                                            .createStatement();
-            ResultSet       rs    = statement.executeQuery(sql);
+            ResultSet       rs    = sql.executeQuery();
             ArrayList<User> users = new ArrayList<>();
             while (rs.next()) {
                 users.add(new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role"))));
             }
-            statement.close();
             rs.close();
             return users.toArray(new User[0]);
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return new User[0];
         }
     }
@@ -148,16 +251,17 @@ class UserProvider implements IUserProvider {
      * @param sql SQL query
      * @return Return user
      */
-    private User requestBookWithOneOutcome(String sql) {
+    private User requestUserWithOneOutcome(PreparedStatement sql) {
         try {
-            Statement statement = dataSource.getConnection()
-                                            .createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            User userObject = new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
-            statement.close();
+            ResultSet rs         = sql.executeQuery();
+            User      userObject = null;
+            if (!rs.isClosed()) {
+                userObject = new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
+            }
             rs.close();
             return userObject;
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }
     }
@@ -167,14 +271,11 @@ class UserProvider implements IUserProvider {
      *
      * @param sql SQL query
      */
-    private void requestWithNoOutcome(String sql) {
+    private void requestWithNoOutcome(PreparedStatement sql) {
         try {
-            Statement statement = dataSource.getConnection()
-                                            .createStatement();
-            statement.execute(sql);
-            statement.close();
+            sql.execute();
         } catch (SQLException e) {
-            System.out.println();
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
         }
     }
 }

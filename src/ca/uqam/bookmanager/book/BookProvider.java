@@ -2,9 +2,9 @@ package ca.uqam.bookmanager.book;
 
 import ca.uqam.bookmanager.database.IDataSource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -34,10 +34,35 @@ class BookProvider implements IBookProvider {
      * @param quantity    Quantity of book
      * @return Book
      */
+    @SuppressWarnings ("PMD.LawOfDemeter")
     @Override
     public Book createBook(final String title, final String author, final String description, final int isbn, final int quantity) {
-        requestWithNoOutcome("INSERT INTO Book (Title, Author, Description, ISBN, Quantity) VALUES ('" + title + "','" + author + "','" + description + "'," + isbn + "," + quantity + ");");
-        return null;
+        final PreparedStatement statement1;
+        final PreparedStatement statement2;
+        try {
+            statement1 = dataSource.getConnection()
+                                  .prepareStatement("INSERT INTO Book (Title, Author, Description, ISBN, Quantity) VALUES ( ?, ? , ? ,? ,? );");
+            statement2 = dataSource.getConnection().prepareStatement("SELECT * FROM Book WHERE Title = ? and Author = ? and Description = ? and ISBN = ? and Quantity = ?;");
+            statement1.setString(1, title);
+            statement1.setString(2, author);
+            statement1.setString(3, description);
+            statement1.setInt(4, isbn);
+            statement1.setInt(5, quantity);
+            statement2.setString(1, title);
+            statement2.setString(2, author);
+            statement2.setString(3, description);
+            statement2.setInt(4, isbn);
+            statement2.setInt(5, quantity);
+            requestWithNoOutcome(statement1);
+            statement1.close();
+            Book bookObject = requestBookWithOneOutcome(statement2);
+            statement2.close();
+            return bookObject;
+        } catch (SQLException e) {
+            return null;
+        }
+        //requestWithNoOutcome("INSERT INTO Book (Title, Author, Description, ISBN, Quantity) VALUES ('" + title + "','" + author + "','" + description + "'," + isbn + "," + quantity + ");");
+        //return null;
     }
     
     /**
@@ -45,7 +70,15 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book[] readAllBook() {
-        return requestBookWithMultipleOutcome("SELECT * FROM Book;");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book;");
+            Book[] bookList = requestBookWithMultipleOutcome(statement);
+            statement.close();
+            return bookList;
+        } catch (SQLException e) {
+            return new Book[0];
+        }
     }
     
     /**
@@ -54,7 +87,16 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book readBook(final int id) {
-        return requestBookWithOneOutcome("SELECT * FROM Book WHERE Id =" + id + ";");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book WHERE Id = ? ;");
+            statement.setInt(1, id);
+            Book bookObject = requestBookWithOneOutcome(statement);
+            statement.close();
+            return bookObject;
+        } catch (SQLException e) {
+            return null;
+        }
     }
     
     /**
@@ -67,7 +109,21 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public void updateBook(final int id, final String title, final String author, final String description, final int isbn, final int quantity) {
-        requestWithNoOutcome("UPDATE Book SET Title = '" + title + "', Author = '" + author + "', Description = '" + description + "',ISBN = " + isbn + ", Quantity =" + quantity + " WHERE Id = " + id + ";");
+        //requestWithNoOutcome("UPDATE Book SET Title = '" + title + "', Author = '" + author + "', Description = '" + description + "',ISBN = " + isbn + ", Quantity =" + quantity + " WHERE Id = " + id + ";");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("UPDATE Book SET Title = ?, Author = ?, Description = ?,ISBN = ? , Quantity =? WHERE Id = ?;");
+            statement.setString(1, title);
+            statement.setString(2, author);
+            statement.setString(3, description);
+            statement.setInt(4, isbn);
+            statement.setInt(5, quantity);
+            statement.setInt(6, id);
+            requestWithNoOutcome(statement);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+        }
     }
     
     /**
@@ -75,7 +131,16 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public void deleteBook(final int id) {
-        requestWithNoOutcome("DELETE FROM Book WHERE Id =" + id + ";");
+        //requestWithNoOutcome("DELETE FROM Book WHERE Id =" + id + ";");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("DELETE FROM Book WHERE Id = ? ;");
+            statement.setInt(1, id);
+            requestWithNoOutcome(statement);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+        }
     }
     
     /**
@@ -84,7 +149,18 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book[] searchBookByTitle(final String title) {
-        return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Title LIKE '" + title + "';");
+        //return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Title LIKE '" + title + "';");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book WHERE Title LIKE ?;");
+            statement.setString(1, title);
+            Book[] bookList = requestBookWithMultipleOutcome(statement);
+            statement.close();
+            return bookList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new Book[0];
+        }
     }
     
     /**
@@ -93,7 +169,18 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book[] searchBookByAuthor(final String author) {
-        return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Author LIKE '" + author + "';");
+        //return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Author LIKE '" + author + "';");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book WHERE Author LIKE ?;");
+            statement.setString(1, author);
+            Book[] bookList = requestBookWithMultipleOutcome(statement);
+            statement.close();
+            return bookList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new Book[0];
+        }
     }
     
     /**
@@ -102,7 +189,18 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book[] searchBookByDescription(final String description) {
-        return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Description LIKE '" + description + "';");
+        //return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE Description LIKE '" + description + "';");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book WHERE Description LIKE ?;");
+            statement.setString(1, description);
+            Book[] bookList = requestBookWithMultipleOutcome(statement);
+            statement.close();
+            return bookList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new Book[0];
+        }
     }
     
     /**
@@ -111,7 +209,18 @@ class BookProvider implements IBookProvider {
      */
     @Override
     public Book[] searchBookByIsbn(final int isbn) {
-        return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE ISBN LIKE " + isbn + ";");
+        //return requestBookWithMultipleOutcome("SELECT * FROM Book WHERE ISBN LIKE " + isbn + ";");
+        try {
+            final PreparedStatement statement = dataSource.getConnection()
+                                                          .prepareStatement("SELECT * FROM Book WHERE ISBN LIKE ?;");
+            statement.setInt(1, isbn);
+            Book[] bookList = requestBookWithMultipleOutcome(statement);
+            statement.close();
+            return bookList;
+        } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
+            return new Book[0];
+        }
     }
     
     /**
@@ -120,16 +229,14 @@ class BookProvider implements IBookProvider {
      * @param sql Sql query
      * @return Book list
      */
-    private Book requestBookWithOneOutcome(final String sql) {
+    private Book requestBookWithOneOutcome(final PreparedStatement sql) {
         try {
-            final Statement statement = dataSource.getConnection()
-                                                  .createStatement();
-            final ResultSet rs = statement.executeQuery(sql);
-            Book bookObject = new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity"));
-            statement.close();
+            final ResultSet rs         = sql.executeQuery();
+            Book            bookObject = new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity"));
             rs.close();
             return bookObject;
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }
     }
@@ -140,19 +247,17 @@ class BookProvider implements IBookProvider {
      * @param sql Sql query
      * @return Book
      */
-    private Book[] requestBookWithMultipleOutcome(final String sql) {
+    private Book[] requestBookWithMultipleOutcome(final PreparedStatement sql) {
         try {
-            Statement statement = dataSource.getConnection()
-                                            .createStatement();
-            ResultSet       rs    = statement.executeQuery(sql);
+            ResultSet       rs    = sql.executeQuery();
             ArrayList<Book> books = new ArrayList<>();
             while (rs.next()) {
                 books.add(new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity")));
             }
-            statement.close();
             rs.close();
             return books.toArray(new Book[0]);
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return new Book[0];
         }
     }
@@ -162,14 +267,11 @@ class BookProvider implements IBookProvider {
      *
      * @param sql Sql query
      */
-    private void requestWithNoOutcome(final String sql) {
+    private void requestWithNoOutcome(final PreparedStatement sql) {
         try {
-            Statement statement = dataSource.getConnection()
-                                            .createStatement();
-            statement.execute(sql);
-            statement.close();
+            sql.execute();
         } catch (SQLException e) {
-            System.out.println("There was an error when executing the query");
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
         }
     }
 }
