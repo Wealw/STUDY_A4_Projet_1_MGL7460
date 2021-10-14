@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * User class
  */
+@SuppressWarnings ("PMD.DoNotTerminateVM")
 public class User {
     
     /**
@@ -46,7 +47,7 @@ public class User {
             messageDigest = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             System.out.print("Missing algorithm for password hashing, please refer to the developer.");
-            System.exit(1);
+            throw new RuntimeException("Missing algorithm for password hashing, please refer to the developer.");
         }
     }
     
@@ -66,7 +67,7 @@ public class User {
             messageDigest = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             System.out.print("Missing algorithm for password hashing, please refer to the developer.");
-            System.exit(1);
+            throw new RuntimeException("Missing algorithm for password hashing, please refer to the developer.");
         }
         this.setId(id);
     }

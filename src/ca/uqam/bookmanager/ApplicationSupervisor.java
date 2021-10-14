@@ -9,14 +9,31 @@ import ca.uqam.bookmanager.database.IDataSource;
 /**
  * Displays and handle logic behind application entry point.
  */
+@SuppressWarnings ("PMD.SystemPrintln")
 class ApplicationSupervisor extends AbstractSupervisor {
     
+    /**
+     * Datasource
+     */
     private final IDataSource    dataSource;
+    /**
+     * User supervisor
+     */
     private final UserSupervisor userSupervisor;
+    /**
+     * Book supervisor
+     */
     private final BookSupervisor bookSupervisor;
-    User user;
+    /**
+     * User
+     */
+    private User user;
     
-    ApplicationSupervisor() {
+    /**
+     * Define basic attribute of the application supervisor
+     */
+    public ApplicationSupervisor() {
+        super();
         this.dataSource = new Database();
         this.userSupervisor = new UserSupervisor(dataSource);
         this.bookSupervisor = new BookSupervisor(dataSource);
@@ -45,7 +62,7 @@ class ApplicationSupervisor extends AbstractSupervisor {
      * Display the app logo to the user.
      */
     private void displayApplicationLogo() {
-        System.out.println((("\u001B[1;35m ____              _    __  __                                   \n" + "|  _ \\            | |  |  \\/  |                                  \n" + "| |_) | ___   ___ | | _| \\  / | __ _ _ __   __ _  __ _  ___ _ __ \n" + "|  _ < / _ \\ / _ \\| |/ / |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|\n" + "| |_) | (_) | (_) |   <| |  | | (_| | | | | (_| | (_| |  __/ |   \n" + "|____/ \\___/ \\___/|_|\\_\\_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|   \n" + "                                                  __/ |          \n" + "                                                 |___/      \u001B[0m ").formatted()).indent(1));
+        System.out.println(("\u001B[1;35m ____              _    __  __                                   %n" + "|  _ \\            | |  |  \\/  |                                  %n" + "| |_) | ___   ___ | | _| \\  / | __ _ _ __   __ _  __ _  ___ _ __ %n" + "|  _ < / _ \\ / _ \\| |/ / |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|%n" + "| |_) | (_) | (_) |   <| |  | | (_| | | | | (_| | (_| |  __/ |   %n" + "|____/ \\___/ \\___/|_|\\_\\_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|   %n" + "                                                  __/ |          %n" + "                                                 |___/      \u001B[0m ").formatted().indent(1));
         System.out.println("Welcome to book manager !");
         System.out.println();
     }

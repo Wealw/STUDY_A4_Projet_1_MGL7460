@@ -10,6 +10,7 @@ import java.util.Objects;
 /**
  * Class designed to handle user input related to book and execute corresponding actions.
  */
+@SuppressWarnings ("PMD.SystemPrintln")
 public class BookSupervisor extends AbstractSupervisor {
     
     /**
@@ -87,7 +88,7 @@ public class BookSupervisor extends AbstractSupervisor {
                 return null;
             }
             return action;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -147,7 +148,7 @@ public class BookSupervisor extends AbstractSupervisor {
             int quantity = Integer.parseInt(this.getScanner()
                                                 .nextLine());
             bookProvider.createBook(title, author, description, isbn, quantity);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("\033[1;31mThere was an error during the creation of the book, please refer to the manual or the application developer.\033[0m");
         }
     }
@@ -208,7 +209,7 @@ public class BookSupervisor extends AbstractSupervisor {
                         bookProvider.updateBook(book.getId(), book.getTitle(), book.getAuthor(), book.getDescription(), book.getIsbn(), book.getQuantity());
                 }
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("\033[1;31mThere was an error during the updating of the book, please refer to the manual or the application developer\033[0m");
         }
     }
@@ -232,11 +233,12 @@ public class BookSupervisor extends AbstractSupervisor {
                     System.out.println("\033[1;31mAre you sure you want to delete this book ? (Y/N)\033[0m");
                     answer = this.getScanner()
                                  .nextLine();
-                    if (Objects.equals(answer, "Y"))
+                    if (Objects.equals(answer, "Y")){
                         bookProvider.deleteBook(book.getId());
+                    }
                 }
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("\033[1;31mThere was an error during the deletion of the book, please refer to the manual or the application developer\033[0m");
         }
     }
@@ -244,6 +246,7 @@ public class BookSupervisor extends AbstractSupervisor {
     /**
      * Display the available search option.
      */
+    @SuppressWarnings ("PMD.SystemPrintln")
     private void displaySearchOption() {
         System.out.println("\033[1;34mPlease, select one of the following options :\033[0m");
         System.out.println("\033[0;34m(1)\033[0m Search by Id");

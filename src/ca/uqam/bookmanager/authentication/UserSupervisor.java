@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * Display handle and execute action related to user
  */
+@SuppressWarnings ("PMD.SystemPrintln")
 public class UserSupervisor extends AbstractSupervisor {
     
     /**
@@ -194,7 +195,7 @@ public class UserSupervisor extends AbstractSupervisor {
      * @param user User object for context
      */
     private void editUser(User user) {
-        System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m \n", user.getUsername());
+        System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m %n", user.getUsername());
         String username = this.getScanner()
                               .nextLine();
         System.out.println("\033[1;34mEnter a new password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
@@ -290,8 +291,11 @@ public class UserSupervisor extends AbstractSupervisor {
             System.out.println("\033[1;34mEnter a user id :\033[0m");
             User user = userProvider.readUser(Integer.parseInt(this.getScanner()
                                                                    .nextLine()));
-            if (user != null) {
-                System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m \n", user.getUsername());
+            if (null == user) {
+                System.out.println("\u001B[31mThe user you are trying to delete doesn't exist\u001B[0m");
+            }
+            else {
+                System.out.printf("\033[1;34mEnter a new username\033[0m \033[0;33m(leave blank for no change)\033[0m \033[0;32m(current : %s)\033[1;34m :\033[0m %n", user.getUsername());
                 String username = this.getScanner()
                                       .nextLine();
                 System.out.println("\033[1;34mEnter a new password\033[0m \033[0;33m(leave blank for no change)\033[0m \033[1;34m:\033[0m");
@@ -322,9 +326,6 @@ public class UserSupervisor extends AbstractSupervisor {
                 }
                 user.setRole(UserRole.values()[choice]);
                 userProvider.updateUser(user.getId(), user.getUsername(), user.getPasswordHash(), user.getRole());
-            }
-            else {
-                System.out.println("\u001B[31mThe user you are trying to delete doesn't exist\u001B[0m");
             }
         } catch (NumberFormatException e) {
             System.out.println("\u001B[31mYou entered an invalid number\u001B[0m");
@@ -386,7 +387,7 @@ public class UserSupervisor extends AbstractSupervisor {
     /**
      * Search user by username
      */
-    public void searchUserByUsername() {
+    private void searchUserByUsername() {
         System.out.println("\033[1;34mEnter a username :\033[0m");
         User[] users = userProvider.searchUserByUsername(this.getScanner()
                                                              .nextLine());
@@ -400,7 +401,7 @@ public class UserSupervisor extends AbstractSupervisor {
     /**
      * Search user by role
      */
-    public void searchUserByRole() {
+    private void searchUserByRole() {
         try {
             int choice = -1;
             while (choice < 1 || choice > 3) {

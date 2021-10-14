@@ -10,6 +10,7 @@ import java.util.ArrayList;
 /**
  * Provide user and user list to other class
  */
+@SuppressWarnings ("PMD.SystemPrintln")
 class UserProvider implements IUserProvider {
     
     /**
@@ -48,7 +49,7 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] readAllUser() {
-        return RequestBookWithMultipleOutcome("SELECT * FROM USER;");
+        return requestBookWithMultipleOutcome("SELECT * FROM USER;");
     }
     
     /**
@@ -104,7 +105,7 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] searchUserByUsername(String username) {
-        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
+        return requestBookWithMultipleOutcome("SELECT * FROM User WHERE UserName LIKE '" + username + "';");
     }
     
     /**
@@ -115,7 +116,7 @@ class UserProvider implements IUserProvider {
      */
     @Override
     public User[] searchUserByRole(UserRole role) {
-        return RequestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
+        return requestBookWithMultipleOutcome("SELECT * FROM User WHERE Role = '" + role.name() + "';");
     }
     
     /**
@@ -124,15 +125,17 @@ class UserProvider implements IUserProvider {
      * @param sql SQL query
      * @return Return user list
      */
-    private User[] RequestBookWithMultipleOutcome(String sql) {
+    private User[] requestBookWithMultipleOutcome(String sql) {
         try {
-            Statement statement = dataSource.getDatabase()
+            Statement statement = dataSource.getConnection()
                                             .createStatement();
             ResultSet       rs    = statement.executeQuery(sql);
             ArrayList<User> users = new ArrayList<>();
             while (rs.next()) {
                 users.add(new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role"))));
             }
+            statement.close();
+            rs.close();
             return users.toArray(new User[0]);
         } catch (SQLException e) {
             return new User[0];
@@ -147,10 +150,13 @@ class UserProvider implements IUserProvider {
      */
     private User requestBookWithOneOutcome(String sql) {
         try {
-            Statement statement = dataSource.getDatabase()
+            Statement statement = dataSource.getConnection()
                                             .createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            return new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
+            User userObject = new User(rs.getInt("Id"), rs.getString("UserName"), rs.getString("Password_Hash"), UserRole.valueOf(rs.getString("Role")));
+            statement.close();
+            rs.close();
+            return userObject;
         } catch (SQLException e) {
             return null;
         }
@@ -163,9 +169,10 @@ class UserProvider implements IUserProvider {
      */
     private void requestWithNoOutcome(String sql) {
         try {
-            Statement statement = dataSource.getDatabase()
+            Statement statement = dataSource.getConnection()
                                             .createStatement();
             statement.execute(sql);
+            statement.close();
         } catch (SQLException e) {
             System.out.println();
         }

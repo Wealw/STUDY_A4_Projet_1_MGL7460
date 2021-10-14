@@ -122,10 +122,13 @@ class BookProvider implements IBookProvider {
      */
     private Book requestBookWithOneOutcome(final String sql) {
         try {
-            final Statement statement = dataSource.getDatabase()
+            final Statement statement = dataSource.getConnection()
                                                   .createStatement();
             final ResultSet rs = statement.executeQuery(sql);
-            return new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity"));
+            Book bookObject = new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity"));
+            statement.close();
+            rs.close();
+            return bookObject;
         } catch (SQLException e) {
             return null;
         }
@@ -139,13 +142,15 @@ class BookProvider implements IBookProvider {
      */
     private Book[] requestBookWithMultipleOutcome(final String sql) {
         try {
-            Statement statement = dataSource.getDatabase()
+            Statement statement = dataSource.getConnection()
                                             .createStatement();
             ResultSet       rs    = statement.executeQuery(sql);
             ArrayList<Book> books = new ArrayList<>();
             while (rs.next()) {
                 books.add(new Book(rs.getInt("Id"), rs.getString("Title"), rs.getString("Author"), rs.getString("Description"), rs.getInt("ISBN"), rs.getInt("Quantity")));
             }
+            statement.close();
+            rs.close();
             return books.toArray(new Book[0]);
         } catch (SQLException e) {
             return new Book[0];
@@ -159,9 +164,10 @@ class BookProvider implements IBookProvider {
      */
     private void requestWithNoOutcome(final String sql) {
         try {
-            Statement statement = dataSource.getDatabase()
+            Statement statement = dataSource.getConnection()
                                             .createStatement();
             statement.execute(sql);
+            statement.close();
         } catch (SQLException e) {
             System.out.println("There was an error when executing the query");
         }

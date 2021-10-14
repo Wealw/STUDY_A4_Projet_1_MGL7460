@@ -1,5 +1,6 @@
 package ca.uqam.bookmanager;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -16,7 +17,7 @@ public abstract class AbstractSupervisor {
      * Define the attribute of the AbstractSupervisor class.
      */
     protected AbstractSupervisor() {
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in, StandardCharsets.UTF_8);
     }
     
     /**

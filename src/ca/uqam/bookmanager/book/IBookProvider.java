@@ -29,12 +29,12 @@ public interface IBookProvider {
      */
     Book readBook(final int id);
     /**
-     * Modify a specific boo in the database.
+     * Modify a specific book in the database.
      *
      * @param id          Book id
      * @param title       Book title
      * @param author      Book author
-     * @param description 'Book description"
+     * @param description Book description
      * @param isbn        Book ISBN
      * @param quantity    Quantity of book
      */

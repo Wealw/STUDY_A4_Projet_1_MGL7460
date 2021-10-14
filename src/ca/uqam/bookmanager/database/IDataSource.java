@@ -12,5 +12,5 @@ public interface IDataSource {
      *
      * @return Database instance
      */
-    Connection getDatabase();
+    Connection getConnection();
 }
