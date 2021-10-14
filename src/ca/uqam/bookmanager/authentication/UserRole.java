@@ -1,9 +1,24 @@
 package ca.uqam.bookmanager.authentication;
 
-public enum UserRole
-{
+
+/**
+ * Define all user role
+ */
+public enum UserRole {
+    /**
+     * Tampon used for easier conversion.
+     */
     DEFAULT,
+    /**
+     * Normal user role.
+     */
     NORMAL,
+    /**
+     * Librarian user role.
+     */
     LIBRARIAN,
+    /**
+     * Administrator user role.
+     */
     ADMINISTRATOR,
 }

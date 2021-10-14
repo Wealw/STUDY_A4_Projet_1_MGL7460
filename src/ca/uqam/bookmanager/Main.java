@@ -1,13 +1,14 @@
 package ca.uqam.bookmanager;
 
-
-public class Main
-{
+public class Main {
     
-    public static void main(String[] args)
-    {
+    /**
+     * Main method
+     *
+     * @param args Main args
+     */
+    public static void main(String[] args) {
         ApplicationSupervisor app = new ApplicationSupervisor();
         app.run();
     }
-    
 }

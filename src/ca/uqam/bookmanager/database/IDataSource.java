@@ -2,7 +2,15 @@ package ca.uqam.bookmanager.database;
 
 import java.sql.Connection;
 
-public interface IDataSource
-{
-    Connection getDatabase();
+/**
+ * Define what a database furnisher sould furnish
+ */
+public interface IDataSource {
+    
+    /**
+     * Return a database instance
+     *
+     * @return Database instance
+     */
+    Connection getConnection();
 }
