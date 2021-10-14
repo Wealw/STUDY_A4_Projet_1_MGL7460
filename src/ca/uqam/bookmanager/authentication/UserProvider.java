@@ -68,7 +68,6 @@ class UserProvider implements IUserProvider {
             statement3.close();
             return userObject;
         } catch (SQLException e) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAH");
             System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }

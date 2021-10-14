@@ -59,6 +59,7 @@ class BookProvider implements IBookProvider {
             statement2.close();
             return bookObject;
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }
         //requestWithNoOutcome("INSERT INTO Book (Title, Author, Description, ISBN, Quantity) VALUES ('" + title + "','" + author + "','" + description + "'," + isbn + "," + quantity + ");");
@@ -77,6 +78,7 @@ class BookProvider implements IBookProvider {
             statement.close();
             return bookList;
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return new Book[0];
         }
     }
@@ -95,6 +97,7 @@ class BookProvider implements IBookProvider {
             statement.close();
             return bookObject;
         } catch (SQLException e) {
+            System.out.println("\033[1;31mThere was an error when executing the query\033[0m");
             return null;
         }
     }
