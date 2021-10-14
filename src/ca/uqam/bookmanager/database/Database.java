@@ -20,7 +20,7 @@ public class Database implements IDataSource {
      */
     public Database() {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database_test/database.sqlite");
+            connection = DriverManager.getConnection("jdbc:sqlite:./database.sqlite");
         } catch (SQLException e) {
             System.out.println("There was an error when connecting to the database please refer to the developer");
             throw new RuntimeException("There was an error when connecting to the database please refer to the developer");
